@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 Kelime & Kalıp Ustası</title>
+    <title>🚀 Kelime & Kalıp Ustası (Genişletilmiş Sürüm)</title>
     <style>
         * { 
             box-sizing: border-box; 
@@ -91,7 +91,6 @@
         }
         .btn-level:hover { background-color: #2980b9; transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.15);}
         
-        /* Özel Kalıplar Butonu tasarımı */
         .btn-patterns {
             grid-column: span 2;
             background-color: #8e44ad;
@@ -245,14 +244,12 @@
 </head>
 <body>
 
-<!-- SEVİYE SEÇİM EKRANI -->
 <div id="level-screen" class="container">
     <h1>🚀 Kelime & Kalıp Ustası</h1>
     <p class="level-subtitle">Seviyeni Seç veya Metin Kalıplarını Çalış,<br>Mushoku Tensei'yi Akıcı Oku!</p>
     <div class="level-grid" id="levels"></div>
 </div>
 
-<!-- OYUN EKRANI -->
 <div id="game-screen" class="container hidden">
     <button class="btn-close" onclick="endGame()">×</button>
     
@@ -283,7 +280,6 @@
     <p id="message"></p>
 </div>
 
-<!-- İNCELEME EKRANI -->
 <div id="inspect-screen" class="container hidden">
     <button class="btn-close" onclick="closeInspectScreen()">×</button>
     
@@ -303,7 +299,6 @@
     <button class="btn-mistakes" onclick="startMistakeMode()">Sadece Yanlışlara Çalış</button>
 </div>
 
-<!-- OYUNU BİTİR ONAY MODALI -->
 <div id="custom-confirm-modal" class="modal-overlay hidden">
     <div class="modal-box">
         <h3 style="color: #2c3e50; margin-top: 0;">Oyundan çıkmak istiyor musun?</h3>
@@ -314,7 +309,6 @@
     </div>
 </div>
 
-<!-- BAŞARI MODALI -->
 <div id="success-modal" class="modal-overlay hidden">
     <div class="modal-box success-modal-box">
         <h2 class="success-text">Tüm Yanlışlarını<br>Düzelttin!<br><br>TEBRİKLER 👍</h2>
@@ -323,42 +317,79 @@
 </div>
 
 <script>
+    // TAM 200 KELİME VE KALIP (Mushoku Tensei Vol.14 Odaklı)
     const wordDatabase = {
         "A1": [
             { en: "Family", tr: "Aile" }, { en: "Home", tr: "Ev" }, { en: "Room", tr: "Oda" },
             { en: "Door", tr: "Kapı" }, { en: "Bed", tr: "Yatak" }, { en: "Table", tr: "Masa" },
             { en: "Water", tr: "Su" }, { en: "Food", tr: "Yemek" }, { en: "Time", tr: "Zaman" },
-            { en: "Book", tr: "Kitap" }, { en: "Hand", tr: "El" }, { en: "Eye", tr: "Göz" }
+            { en: "Book", tr: "Kitap" }, { en: "Hand", tr: "El" }, { en: "Eye", tr: "Göz" },
+            { en: "Sword", tr: "Kılıç" }, { en: "King", tr: "Kral" }, { en: "Castle", tr: "Kale" },
+            { en: "Light", tr: "Işık" }, { en: "Dark", tr: "Karanlık" }, { en: "Fire", tr: "Ateş" },
+            { en: "Ice", tr: "Buz" }, { en: "Sky", tr: "Gökyüzü" }, { en: "Earth", tr: "Toprak / Yeryüzü" },
+            { en: "Father", tr: "Baba" }, { en: "Mother", tr: "Anne" }, { en: "Brother", tr: "Erkek Kardeş" },
+            { en: "Sister", tr: "Kız Kardeş" }, { en: "Son", tr: "Erkek Evlat" }, { en: "Daughter", tr: "Kız Evlat" },
+            { en: "Day", tr: "Gün" }, { en: "Night", tr: "Gece" }, { en: "City", tr: "Şehir" }
         ],
         "A2": [
             { en: "Future", tr: "Gelecek" }, { en: "Past", tr: "Geçmiş" }, { en: "Journey", tr: "Yolculuk" },
-            { en: "Castle", tr: "Kale" }, { en: "Basement", tr: "Bodrum" }, { en: "Kitchen", tr: "Mutfak" },
-            { en: "Diary", tr: "Günlük" }, { en: "Friend", tr: "Arkadaş" }, { en: "Medicine", tr: "İlaç" },
-            { en: "Weapon", tr: "Silah" }, { en: "Sword", tr: "Kılıç" }, { en: "Guard", tr: "Muhafız" }
+            { en: "Basement", tr: "Bodrum" }, { en: "Kitchen", tr: "Mutfak" }, { en: "Diary", tr: "Günlük" },
+            { en: "Friend", tr: "Arkadaş" }, { en: "Medicine", tr: "İlaç" }, { en: "Weapon", tr: "Silah" },
+            { en: "Guard", tr: "Muhafız" }, { en: "Soldier", tr: "Asker" }, { en: "Magic", tr: "Büyü" },
+            { en: "Monster", tr: "Canavar" }, { en: "Forest", tr: "Orman" }, { en: "Sand", tr: "Kum" },
+            { en: "Blood", tr: "Kan" }, { en: "Dangerous", tr: "Tehlikeli" }, { en: "Secret", tr: "Sır" },
+            { en: "Protect", tr: "Korumak" }, { en: "Attack", tr: "Saldırmak" }, { en: "Escape", tr: "Kaçmak" },
+            { en: "Understand", tr: "Anlamak" }, { en: "Believe", tr: "İnanmak" }, { en: "Dream", tr: "Rüya" },
+            { en: "Sleep", tr: "Uyumak" }, { en: "Laugh", tr: "Gülmek" }, { en: "Cry", tr: "Ağlamak" },
+            { en: "Wall", tr: "Duvar" }, { en: "Floor", tr: "Zemin" }, { en: "Stone", tr: "Taş" }
         ],
         "B1": [
             { en: "Fortress", tr: "Hisar / Kale" }, { en: "Ruins", tr: "Kalıntılar" }, { en: "Teleportation", tr: "Işınlanma" },
             { en: "Summoning", tr: "Çağırma" }, { en: "Curse", tr: "Lanet" }, { en: "Syndrome", tr: "Sendrom" },
             { en: "Poison", tr: "Zehir" }, { en: "Discovery", tr: "Keşif" }, { en: "Promise", tr: "Söz vermek" },
-            { en: "Anxiety", tr: "Endişe" }, { en: "Exhausted", tr: "Tükenmiş" }, { en: "Silence", tr: "Sessizlik" }
+            { en: "Anxiety", tr: "Endişe" }, { en: "Exhausted", tr: "Tükenmiş" }, { en: "Silence", tr: "Sessizlik" },
+            { en: "Horizon", tr: "Ufuk" }, { en: "Dungeon", tr: "Zindan" }, { en: "Hesitate", tr: "Tereddüt etmek" },
+            { en: "Apologize", tr: "Özür dilemek" }, { en: "Permission", tr: "İzin" }, { en: "Investigate", tr: "Soruşturmak / İncelemek" },
+            { en: "Appreciate", tr: "Takdir etmek" }, { en: "Destination", tr: "Varış noktası" }, { en: "Corridor", tr: "Koridor" },
+            { en: "Unconscious", tr: "Bilinçsiz / Baygın" }, { en: "Nightmare", tr: "Kabus" }, { en: "Knowledge", tr: "Bilgi" },
+            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader (D...)" },
+            { en: "Fate", tr: "Kader / Alınyazısı" }, { en: "Mistake", tr: "Hata" }, { en: "Forgive", tr: "Affetmek" }
         ],
         "B2": [
             { en: "Consciousness", tr: "Bilinç" }, { en: "Despair", tr: "Umutsuzluk" }, { en: "Warning", tr: "Uyarı" },
             { en: "Suspicious", tr: "Şüpheli" }, { en: "Strategy", tr: "Strateji" }, { en: "Opportunity", tr: "Fırsat" },
             { en: "Prejudice", tr: "Önyargı" }, { en: "Responsibility", tr: "Sorumluluk" }, { en: "Architecture", tr: "Mimari" },
-            { en: "Immortal", tr: "Ölümsüz" }, { en: "Paralyzed", tr: "Felç olmuş" }, { en: "Resistance", tr: "Direnç" }
+            { en: "Immortal", tr: "Ölümsüz" }, { en: "Paralyzed", tr: "Felç olmuş" }, { en: "Resistance", tr: "Direnç" },
+            { en: "Intimidating", tr: "Korkutucu" }, { en: "Atmosphere", tr: "Atmosfer / Ortam" }, { en: "Vengeance", tr: "İntikam" },
+            { en: "Compassion", tr: "Şefkat" }, { en: "Relentless", tr: "Acımasız / Durmak bilmez" }, { en: "Overwhelming", tr: "Bunalatan / Ezici" },
+            { en: "Intervene", tr: "Müdahale etmek" }, { en: "Provoke", tr: "Kışkırtmak" }, { en: "Justification", tr: "Gerekçe / Haklı çıkarma" },
+            { en: "Solitude", tr: "Yalnızlık" }, { en: "Manipulate", tr: "Manipüle etmek" }, { en: "Deflect", tr: "Saptırmak / Yönünü değiştirmek" },
+            { en: "Authority", tr: "Otorite / Yetki" }, { en: "Conflicted", tr: "Çelişkili / İkilemde kalmış" }, { en: "Encounter", tr: "Karşılaşma" },
+            { en: "Grudge", tr: "Kin / Garez" }, { en: "Persuasive", tr: "İkna edici" }, { en: "Unfounded", tr: "Asılsız / Temelsiz" }
         ],
         "C1": [
             { en: "Artifact", tr: "Büyülü Eşya / Eser" }, { en: "Incantation", tr: "Büyü Sözü / Tılsım" }, { en: "Pathogen", tr: "Patojen" },
             { en: "Immunity", tr: "Bağışıklık" }, { en: "Battle Aura", tr: "Savaş Aurası" }, { en: "Disturb Magic", tr: "Büyü Bozma" },
             { en: "Clairvoyance", tr: "Öngörü / Durugörü" }, { en: "Resemblance", tr: "Benzerlik" }, { en: "Coincidental", tr: "Tesadüfi" },
-            { en: "Imposing", tr: "Heybetli" }, { en: "Extravagant", tr: "Gösterişli / Lüks" }, { en: "Maniacal", tr: "Maniakal / Çılgınca" }
+            { en: "Imposing", tr: "Heybetli" }, { en: "Extravagant", tr: "Gösterişli / Lüks" }, { en: "Maniacal", tr: "Maniakal / Çılgınca" },
+            { en: "Acquaintance", tr: "Tanıdık" }, { en: "Contorted", tr: "Çarpılmış / Yüzü buruşmuş" }, { en: "Baffled", tr: "Şaşkına dönmüş" },
+            { en: "Empathize", tr: "Empati kurmak" }, { en: "Promiscuity", tr: "Rastgele ilişki" }, { en: "Mumble", tr: "Mırıldanmak" },
+            { en: "Plunder", tr: "Yağmalamak" }, { en: "Labyrinth", tr: "Labirent" }, { en: "Hallucination", tr: "Halüsinasyon" },
+            { en: "Intricate", tr: "Karmaşık / İnce detaylı" }, { en: "Extinguish", tr: "Söndürmek" }, { en: "Unfathomable", tr: "Akıl almaz" },
+            { en: "Labyrinthine", tr: "Labirent gibi (karışık)" }, { en: "Dilapidated", tr: "Harap / Yıkık dökük" }, { en: "Premonition", tr: "Önsezi / İçine doğma" },
+            { en: "Sullenly", tr: "Somurtarak" }, { en: "Formality", tr: "Resmiyet / Prosedür" }, { en: "Decoct", tr: "Kaynatarak özünü çıkarmak" }
         ],
         "C2": [
             { en: "Indescribable", tr: "Tarif edilemez" }, { en: "Oozing", tr: "Sızdıran / Yayan" }, { en: "Uncanny", tr: "Ürkütücü derecede tuhaf" },
             { en: "Behemoth", tr: "Devasa yaratık" }, { en: "Opaque", tr: "Mat / Işık geçirmeyen" }, { en: "Protruding", tr: "Dışarı çıkık" },
             { en: "Crotchety", tr: "Huysuz / Çabuk öfkelenen" }, { en: "Deferential", tr: "Hürmetkar" }, { en: "Tantamount", tr: "Eşdeğer" },
-            { en: "Flippant", tr: "Laubali / Ciddiyetsiz" }, { en: "Lackadaisical", tr: "Uyuşuk / Başından savan" }, { en: "Furtively", tr: "Gizlice" }
+            { en: "Flippant", tr: "Laubali / Ciddiyetsiz" }, { en: "Lackadaisical", tr: "Uyuşuk / Başından savan" }, { en: "Furtively", tr: "Gizlice" },
+            { en: "Emaciated", tr: "Bir deri bir kemik kalmış" }, { en: "Suffocating", tr: "Boğucu" }, { en: "Ashen", tr: "Kül rengi / Solgun" },
+            { en: "Purgatory", tr: "Araf" }, { en: "Insatiable", tr: "Doymak bilmez" }, { en: "Imbecile", tr: "Ahmak / Gerizekalı" },
+            { en: "Audacious", tr: "Gözüpek / Cüretkar" }, { en: "Indispensable", tr: "Vazgeçilmez" }, { en: "Paraphernalia", tr: "Teçhizat / Eşya" },
+            { en: "Phantasm", tr: "Hayalet / Görüntü" }, { en: "Incessant", tr: "Aralıksız / Durmak bilmeyen" }, { en: "Pulverize", tr: "Paramparça etmek" },
+            { en: "Prostrating", tr: "Yere kapanma / Secde etme" }, { en: "Dumbstruck", tr: "Dili tutulmuş / Apışıp kalmış" }, { en: "Uncowed", tr: "Yılmamış / Korkutulmamış" },
+            { en: "Voluptuous", tr: "Şehvet uyandıran / Kıvrımlı" }, { en: "Resigned", tr: "Boyun eğmiş / Kabullenmiş" }, { en: "Disheveled", tr: "Dağınık (saç/baş)" }
         ],
         "Kalıplar": [
             { en: "Even if...", tr: "Se bile / ...sa bile" },
@@ -370,7 +401,17 @@
             { en: "To make matters worse", tr: "Dahası / işin kötüsü" },
             { en: "No matter how...", tr: "Ne kadar ...sa ...sın" },
             { en: "Rather than...", tr: "-den ziyade / -mek yerine" },
-            { en: "As long as...", tr: "-diği sürece / -madığı sürece" }
+            { en: "As long as...", tr: "-diği sürece / -madığı sürece" },
+            { en: "In other words", tr: "Başka bir deyişle" },
+            { en: "On the other hand", tr: "Öte yandan" },
+            { en: "Without a doubt", tr: "Şüphesiz" },
+            { en: "For the sake of", tr: "Uğruna / Hatırına" },
+            { en: "In the blink of an eye", tr: "Göz açıp kapayıncaya kadar" },
+            { en: "All of a sudden", tr: "Aniden / Birdenbire" },
+            { en: "Out of nowhere", tr: "Hiçyoktan / Beklenmedik anda" },
+            { en: "Back and forth", tr: "İleri geri / Gidip gelerek" },
+            { en: "Up until now", tr: "Şimdiye kadar" },
+            { en: "To be honest", tr: "Dürüst olmak gerekirse" }
         ]
     };
 
@@ -404,15 +445,14 @@
         
         levels.forEach(lvl => {
             let btn = document.createElement('button');
-            btn.innerText = `Seviye ${lvl}`;
+            btn.innerText = `Seviye ${lvl} (${wordDatabase[lvl].length} Kelime)`;
             btn.className = "btn-level";
             btn.onclick = () => startLevel(lvl);
             levelsDiv.appendChild(btn);
         });
 
-        // Özel Kalıplar ve Bağlaçlar Butonu Ekleniyor
         let patternBtn = document.createElement('button');
-        patternBtn.innerText = "📖 Metin Kalıpları & Bağlaçlar";
+        patternBtn.innerText = `📖 Metin Kalıpları & Bağlaçlar (${wordDatabase["Kalıplar"].length} Adet)`;
         patternBtn.className = "btn-level btn-patterns";
         patternBtn.onclick = () => startLevel("Kalıplar");
         levelsDiv.appendChild(patternBtn);
@@ -434,7 +474,6 @@
         
         refillPool(); 
 
-        // Kalıplar modu için soru üst metnini değiştir
         if(levelKey === "Kalıplar") {
             document.getElementById('prompt-text').innerText = "BU KALIBIN ANLAMI NEDİR?";
         } else {
