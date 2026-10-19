@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Kelime & Kalıp Ustası</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%); 
+        }
+        
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            text-align: center; 
+            width: 90%; 
+            max-width: 450px; 
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 { 
+            color: #2c3e50; 
+            margin-bottom: 10px; 
+            font-size: clamp(24px, 6vw, 34px); 
+        }
+        
+        .level-subtitle { 
+            color: #34495e; 
+            font-weight: 600; 
+            margin-bottom: 20px; 
+            font-size: clamp(14px, 4vw, 18px); 
+            line-height: 1.4;
+        }
+        
+        .btn-close {
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            width: 35px; 
+            height: 35px;
+            background-color: #ff4d4d; 
+            color: white; 
+            border: none; 
+            border-radius: 50%;
+            cursor: pointer; 
+            font-size: 20px; 
+            font-weight: bold; 
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+            padding: 0; 
+            z-index: 100; 
+        }
+        .btn-close:hover { background-color: #ff0000; transform: scale(1.1); }
+        
+        .level-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 10px; 
+            margin-top: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .btn-level { 
+            background-color: #3498db; 
+            color: white; 
+            padding: 12px 0; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: bold;
+        }
+        .btn-level:hover { background-color: #2980b9; transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.15);}
+        
+        /* Özel Kalıplar Butonu tasarımı */
+        .btn-patterns {
+            grid-column: span 2;
+            background-color: #8e44ad;
+        }
+        .btn-patterns:hover { background-color: #732d91; }
+
+        .hidden { display: none !important; }
+
+        #score-board { 
+            margin-bottom: 15px; 
+            margin-top: 35px; 
+            background: #f8f9fa; 
+            padding: 15px; 
+            padding-right: 50px; 
+            border-radius: 15px; 
+            display: flex; 
+            flex-direction: column;
+            gap: 5px; 
+            position: relative; 
+            cursor: pointer; 
+            transition: background-color 0.2s ease;
+        }
+        #score-board:hover { background-color: #e9ecef; }
+        
+        .main-stats { font-size: 16px; font-weight: bold; color: #2c3e50; }
+        .sub-stats { font-size: 14px; font-weight: bold; display: flex; justify-content: center; gap: 8px; align-items: center;}
+        
+        .stat-correct { color: #27ae60; }
+        .stat-wrong { color: #e74c3c; }
+        .stat-divider { color: #bdc3c7; }
+
+        .btn-inspect {
+            position: absolute; 
+            top: 50%; 
+            right: 10px; 
+            transform: translateY(-50%);
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            font-size: 11px; 
+            font-weight: bold; 
+            color: #2c3e50; 
+        }
+        .btn-inspect span { font-size: 20px; margin-bottom: 2px; }
+
+        .table-list {
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
+            margin-top: 15px; 
+            padding: 12px; 
+            background: #f8f9fa;
+            border-radius: 15px; 
+            border: 2px solid #ecf0f1;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .table-row { 
+            font-size: 14px; 
+            font-weight: bold; 
+            padding-bottom: 5px; 
+            border-bottom: 1px dashed #ddd; 
+            text-align: left; 
+            display: flex;
+            justify-content: space-between;
+        }
+        .row-correct { color: #27ae60; }
+        .row-wrong { color: #e74c3c; }
+        .row-unanswered { color: #7f8c8d; }
+
+        .btn-mistakes {
+            background-color: #e67e22; 
+            color: white; 
+            padding: 12px; 
+            font-size: 18px;
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold;
+            width: 100%; 
+            margin-top: 15px; 
+            transition: 0.3s;
+        }
+        .btn-mistakes:hover { background-color: #d35400; transform: translateY(-2px); }
+
+        #word-container {
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid #ced4da;
+        }
+
+        #question-word { 
+            font-size: 24px; 
+            font-weight: 900; 
+            color: #2c3e50; 
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .options { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 15px; 
+        }
+
+        .btn-option { 
+            background-color: #ffffff; 
+            color: #2c3e50; 
+            border: 2px solid #ced4da; 
+            padding: 12px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            border-radius: 12px;
+            cursor: pointer; 
+            transition: 0.3s; 
+            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .btn-option:hover { background-color: #e2e6ea; transform: translateY(-2px); }
+        
+        .correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; }
+        .wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; }
+
+        #message { height: 25px; font-weight: bold; margin-top: 10px; font-size: 18px; }
+
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); 
+            display: flex; justify-content: center; align-items: center; 
+            z-index: 1000; 
+        }
+        .modal-overlay.hidden { display: none !important; }
+        .modal-box { 
+            background: white; padding: 25px 20px; border-radius: 20px; 
+            text-align: center; width: 90%; max-width: 380px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+        }
+        .success-modal-box { background-color: #fcfcf0; padding: 40px 20px; }
+        .success-text { font-size: 26px; font-weight: 900; color: #000; margin: 0; }
+        .modal-buttons { display: flex; justify-content: space-between; gap: 15px; margin-top: 15px;}
+        .btn-modal-end, .btn-modal-continue { 
+            flex: 1; padding: 12px 10px; font-size: 16px; font-weight: 800; 
+            border-radius: 12px; cursor: pointer; background: transparent; 
+        }
+        .btn-modal-end { color: #e74c3c; border: 2px solid #e74c3c; }
+        .btn-modal-continue { color: #2ecc71; border: 2px solid #2ecc71; }
+    </style>
+</head>
+<body>
+
+<!-- SEVİYE SEÇİM EKRANI -->
+<div id="level-screen" class="container">
+    <h1>🚀 Kelime & Kalıp Ustası</h1>
+    <p class="level-subtitle">Seviyeni Seç veya Metin Kalıplarını Çalış,<br>Mushoku Tensei'yi Akıcı Oku!</p>
+    <div class="level-grid" id="levels"></div>
+</div>
+
+<!-- OYUN EKRANI -->
+<div id="game-screen" class="container hidden">
+    <button class="btn-close" onclick="endGame()">×</button>
+    
+    <div id="score-board" onclick="openInspectScreen()">
+        <div class="main-stats">Bölüm: <span id="level-display">A1</span> | Skor: <span id="score">0</span></div>
+        <div class="sub-stats">
+            <span class="stat-correct">✔ Doğru: <span id="correct-count">0</span></span>
+            <span class="stat-divider">|</span>
+            <span class="stat-wrong">✖ Yanlış: <span id="wrong-count">0</span></span>
+        </div>
+        <div class="btn-inspect">
+            <span>🔍</span>
+            İncele
+        </div>
+    </div>
+
+    <div id="word-container">
+        <p style="font-size: 13px; color: #7f8c8d; margin: 0 0 5px 0; font-weight: bold;" id="prompt-text">BU KELİMENİN ANLAMI NEDİR?</p>
+        <h2 id="question-word">Loading...</h2>
+    </div>
+    
+    <div class="options">
+        <button id="opt0" class="btn-option" onclick="checkAnswer(0)"></button>
+        <button id="opt1" class="btn-option" onclick="checkAnswer(1)"></button>
+        <button id="opt2" class="btn-option" onclick="checkAnswer(2)"></button>
+    </div>
+    
+    <p id="message"></p>
+</div>
+
+<!-- İNCELEME EKRANI -->
+<div id="inspect-screen" class="container hidden">
+    <button class="btn-close" onclick="closeInspectScreen()">×</button>
+    
+    <div id="score-board" style="padding-right: 15px; cursor: default;">
+        <div class="main-stats">Bölüm: <span id="insp-level-title">A1</span> | Skor: <span id="insp-score">0</span></div>
+        <div class="sub-stats">
+            <span class="stat-correct">✔ Doğru: <span id="insp-correct">0</span></span>
+            <span class="stat-divider">|</span>
+            <span class="stat-wrong">✖ Yanlış: <span id="insp-wrong">0</span></span>
+        </div>
+    </div>
+
+    <h3 style="color: #2c3e50; margin: 5px 0;" id="insp-header-text">Liste Durumu</h3>
+    
+    <div id="table-list" class="table-list"></div>
+
+    <button class="btn-mistakes" onclick="startMistakeMode()">Sadece Yanlışlara Çalış</button>
+</div>
+
+<!-- OYUNU BİTİR ONAY MODALI -->
+<div id="custom-confirm-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3 style="color: #2c3e50; margin-top: 0;">Oyundan çıkmak istiyor musun?</h3>
+        <div class="modal-buttons">
+            <button class="btn-modal-end" onclick="confirmEndGame()">Evet, Çık</button>
+            <button class="btn-modal-continue" onclick="cancelEndGame()">Devam Et</button>
+        </div>
+    </div>
+</div>
+
+<!-- BAŞARI MODALI -->
+<div id="success-modal" class="modal-overlay hidden">
+    <div class="modal-box success-modal-box">
+        <h2 class="success-text">Tüm Yanlışlarını<br>Düzelttin!<br><br>TEBRİKLER 👍</h2>
+        <button class="btn-modal-continue" style="margin-top: 15px; width: 100%;" onclick="closeSuccessModal()">Devam Et</button>
+    </div>
+</div>
+
+<script>
+    const wordDatabase = {
+        "A1": [
+            { en: "Family", tr: "Aile" }, { en: "Home", tr: "Ev" }, { en: "Room", tr: "Oda" },
+            { en: "Door", tr: "Kapı" }, { en: "Bed", tr: "Yatak" }, { en: "Table", tr: "Masa" },
+            { en: "Water", tr: "Su" }, { en: "Food", tr: "Yemek" }, { en: "Time", tr: "Zaman" },
+            { en: "Book", tr: "Kitap" }, { en: "Hand", tr: "El" }, { en: "Eye", tr: "Göz" }
+        ],
+        "A2": [
+            { en: "Future", tr: "Gelecek" }, { en: "Past", tr: "Geçmiş" }, { en: "Journey", tr: "Yolculuk" },
+            { en: "Castle", tr: "Kale" }, { en: "Basement", tr: "Bodrum" }, { en: "Kitchen", tr: "Mutfak" },
+            { en: "Diary", tr: "Günlük" }, { en: "Friend", tr: "Arkadaş" }, { en: "Medicine", tr: "İlaç" },
+            { en: "Weapon", tr: "Silah" }, { en: "Sword", tr: "Kılıç" }, { en: "Guard", tr: "Muhafız" }
+        ],
+        "B1": [
+            { en: "Fortress", tr: "Hisar / Kale" }, { en: "Ruins", tr: "Kalıntılar" }, { en: "Teleportation", tr: "Işınlanma" },
+            { en: "Summoning", tr: "Çağırma" }, { en: "Curse", tr: "Lanet" }, { en: "Syndrome", tr: "Sendrom" },
+            { en: "Poison", tr: "Zehir" }, { en: "Discovery", tr: "Keşif" }, { en: "Promise", tr: "Söz vermek" },
+            { en: "Anxiety", tr: "Endişe" }, { en: "Exhausted", tr: "Tükenmiş" }, { en: "Silence", tr: "Sessizlik" }
+        ],
+        "B2": [
+            { en: "Consciousness", tr: "Bilinç" }, { en: "Despair", tr: "Umutsuzluk" }, { en: "Warning", tr: "Uyarı" },
+            { en: "Suspicious", tr: "Şüpheli" }, { en: "Strategy", tr: "Strateji" }, { en: "Opportunity", tr: "Fırsat" },
+            { en: "Prejudice", tr: "Önyargı" }, { en: "Responsibility", tr: "Sorumluluk" }, { en: "Architecture", tr: "Mimari" },
+            { en: "Immortal", tr: "Ölümsüz" }, { en: "Paralyzed", tr: "Felç olmuş" }, { en: "Resistance", tr: "Direnç" }
+        ],
+        "C1": [
+            { en: "Artifact", tr: "Büyülü Eşya / Eser" }, { en: "Incantation", tr: "Büyü Sözü / Tılsım" }, { en: "Pathogen", tr: "Patojen" },
+            { en: "Immunity", tr: "Bağışıklık" }, { en: "Battle Aura", tr: "Savaş Aurası" }, { en: "Disturb Magic", tr: "Büyü Bozma" },
+            { en: "Clairvoyance", tr: "Öngörü / Durugörü" }, { en: "Resemblance", tr: "Benzerlik" }, { en: "Coincidental", tr: "Tesadüfi" },
+            { en: "Imposing", tr: "Heybetli" }, { en: "Extravagant", tr: "Gösterişli / Lüks" }, { en: "Maniacal", tr: "Maniakal / Çılgınca" }
+        ],
+        "C2": [
+            { en: "Indescribable", tr: "Tarif edilemez" }, { en: "Oozing", tr: "Sızdıran / Yayan" }, { en: "Uncanny", tr: "Ürkütücü derecede tuhaf" },
+            { en: "Behemoth", tr: "Devasa yaratık" }, { en: "Opaque", tr: "Mat / Işık geçirmeyen" }, { en: "Protruding", tr: "Dışarı çıkık" },
+            { en: "Crotchety", tr: "Huysuz / Çabuk öfkelenen" }, { en: "Deferential", tr: "Hürmetkar" }, { en: "Tantamount", tr: "Eşdeğer" },
+            { en: "Flippant", tr: "Laubali / Ciddiyetsiz" }, { en: "Lackadaisical", tr: "Uyuşuk / Başından savan" }, { en: "Furtively", tr: "Gizlice" }
+        ],
+        "Kalıplar": [
+            { en: "Even if...", tr: "Se bile / ...sa bile" },
+            { en: "As if / As though", tr: "Sanki / ...çıkcasına" },
+            { en: "So that...", tr: "-sın diye / -mesi için" },
+            { en: "By the way", tr: "Bu arada / laf aramızda" },
+            { en: "In the meantime", tr: "Bu esnada / bu sırada" },
+            { en: "At first glance", tr: "İlk bakışta" },
+            { en: "To make matters worse", tr: "Dahası / işin kötüsü" },
+            { en: "No matter how...", tr: "Ne kadar ...sa ...sın" },
+            { en: "Rather than...", tr: "-den ziyade / -mek yerine" },
+            { en: "As long as...", tr: "-diği sürece / -madığı sürece" }
+        ]
+    };
+
+    let currentLevelKey = "A1";
+    let activeWordList = [];
+    let currentWordObj = {};
+    let currentWordIndex = 0;
+    let correctAnswerIndex = 0;
+    
+    let score = 0;
+    let correctCount = 0; 
+    let wrongCount = 0;   
+    let isClickable = true; 
+    let historyData = {}; 
+
+    let isMistakeMode = false;
+    let mistakeQueue = [];
+    let currentPool = []; 
+
+    function showScreen(screenId) {
+        document.getElementById('level-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('inspect-screen').classList.add('hidden');
+        document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function generateLevelButtons() {
+        const levelsDiv = document.getElementById('levels');
+        levelsDiv.innerHTML = ""; 
+        const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+        
+        levels.forEach(lvl => {
+            let btn = document.createElement('button');
+            btn.innerText = `Seviye ${lvl}`;
+            btn.className = "btn-level";
+            btn.onclick = () => startLevel(lvl);
+            levelsDiv.appendChild(btn);
+        });
+
+        // Özel Kalıplar ve Bağlaçlar Butonu Ekleniyor
+        let patternBtn = document.createElement('button');
+        patternBtn.innerText = "📖 Metin Kalıpları & Bağlaçlar";
+        patternBtn.className = "btn-level btn-patterns";
+        patternBtn.onclick = () => startLevel("Kalıplar");
+        levelsDiv.appendChild(patternBtn);
+    }
+    window.onload = generateLevelButtons;
+
+    function startLevel(levelKey) {
+        currentLevelKey = levelKey;
+        activeWordList = wordDatabase[levelKey];
+        
+        document.getElementById('level-display').innerText = levelKey;
+
+        score = 0;
+        correctCount = 0; 
+        wrongCount = 0;   
+        historyData = {};
+        isMistakeMode = false;
+        mistakeQueue = [];
+        
+        refillPool(); 
+
+        // Kalıplar modu için soru üst metnini değiştir
+        if(levelKey === "Kalıplar") {
+            document.getElementById('prompt-text').innerText = "BU KALIBIN ANLAMI NEDİR?";
+        } else {
+            document.getElementById('prompt-text').innerText = "BU KELİMENİN ANLAMI NEDİR?";
+        }
+
+        updateScore();
+        showScreen('game-screen');
+        askQuestion();
+    }
+
+    function refillPool() {
+        currentPool = [];
+        for (let i = 0; i < activeWordList.length; i++) {
+            currentPool.push(i);
+        }
+        currentPool.sort(() => Math.random() - 0.5);
+    }
+
+    function askQuestion() {
+        isClickable = true;
+        document.getElementById("message").innerText = "";
+        
+        for (let i = 0; i < 3; i++) {
+            document.getElementById(`opt${i}`).className = "btn-option";
+        }
+
+        if (isMistakeMode) {
+            const randomIndex = Math.floor(Math.random() * mistakeQueue.length);
+            currentWordIndex = mistakeQueue[randomIndex];
+        } else {
+            if (currentPool.length === 0) {
+                refillPool();
+            }
+            currentWordIndex = currentPool.pop();
+        }
+
+        currentWordObj = activeWordList[currentWordIndex];
+        document.getElementById("question-word").innerText = currentWordObj.en;
+
+        correctAnswerIndex = Math.floor(Math.random() * 3);
+
+        let wrongOptions = activeWordList.filter(w => w.tr !== currentWordObj.tr);
+        wrongOptions.sort(() => Math.random() - 0.5);
+
+        let optionsArr = [];
+        let wrongCounter = 0;
+
+        for (let i = 0; i < 3; i++) {
+            if (i === correctAnswerIndex) {
+                optionsArr.push(currentWordObj.tr);
+            } else {
+                optionsArr.push(wrongOptions[wrongCounter].tr);
+                wrongCounter++;
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+            document.getElementById(`opt${i}`).innerText = optionsArr[i];
+        }
+    }
+
+    function checkAnswer(selectedIndex) {
+        if (!isClickable) return; 
+        isClickable = false;
+
+        const selectedBtn = document.getElementById(`opt${selectedIndex}`);
+        const correctBtn = document.getElementById(`opt${correctAnswerIndex}`);
+
+        if (selectedIndex === correctAnswerIndex) {
+            selectedBtn.classList.add("correct");
+            document.getElementById("message").innerText = "Harika! 🎉";
+            document.getElementById("message").style.color = "#27ae60";
+            score += 10;
+            
+            if (isMistakeMode) {
+                historyData[currentWordIndex] = 'correct';
+                if (wrongCount > 0) wrongCount--;
+                correctCount++;
+                updateScore();
+
+                mistakeQueue = mistakeQueue.filter(m => m !== currentWordIndex);
+                
+                if (mistakeQueue.length === 0) {
+                    setTimeout(() => {
+                        isMistakeMode = false;
+                        document.getElementById('success-modal').classList.remove('hidden');
+                    }, 1000);
+                    return;
+                }
+            } else {
+                correctCount++; 
+                updateScore();
+                if(historyData[currentWordIndex] !== 'wrong') {
+                    historyData[currentWordIndex] = 'correct';
+                }
+            }
+
+            setTimeout(askQuestion, 1000); 
+        } else {
+            selectedBtn.classList.add("wrong");
+            correctBtn.classList.add("correct");
+            document.getElementById("message").innerText = "Maalesef yanlış!";
+            document.getElementById("message").style.color = "#c0392b";
+            wrongCount++; 
+            updateScore();
+            historyData[currentWordIndex] = 'wrong';
+
+            if (!isMistakeMode && !currentPool.includes(currentWordIndex)) {
+                currentPool.push(currentWordIndex); 
+                currentPool.sort(() => Math.random() - 0.5); 
+            }
+
+            setTimeout(askQuestion, 1500); 
+        }
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('success-modal').classList.add('hidden');
+        askQuestion();
+        openInspectScreen();
+    }
+
+    function updateScore() {
+        document.getElementById('score').innerText = score;
+        document.getElementById('correct-count').innerText = correctCount;
+        document.getElementById('wrong-count').innerText = wrongCount;
+    }
+
+    function endGame() {
+        if (isMistakeMode) {
+            isMistakeMode = false;
+            openInspectScreen(); 
+        } else {
+            document.getElementById('custom-confirm-modal').classList.remove('hidden');
+        }
+    }
+
+    function confirmEndGame() {
+        document.getElementById('custom-confirm-modal').classList.add('hidden');
+        showScreen('level-screen');
+    }
+
+    function cancelEndGame() {
+        document.getElementById('custom-confirm-modal').classList.add('hidden');
+    }
+
+    function openInspectScreen() {
+        showScreen('inspect-screen');
+        
+        document.getElementById('insp-score').innerText = score;
+        document.getElementById('insp-correct').innerText = correctCount;
+        document.getElementById('insp-wrong').innerText = wrongCount;
+        document.getElementById('insp-level-title').innerText = currentLevelKey;
+
+        const listDiv = document.getElementById('table-list');
+        listDiv.innerHTML = "";
+
+        activeWordList.forEach((wordObj, i) => {
+            let row = document.createElement('div');
+            row.className = "table-row";
+            
+            let statusHTML = "";
+            let rowClass = "row-unanswered";
+
+            if (historyData[i] === 'correct') {
+                statusHTML = "✔ Doğru";
+                rowClass = "row-correct";
+            } else if (historyData[i] === 'wrong') {
+                statusHTML = "✖ Yanlış";
+                rowClass = "row-wrong";
+            } else {
+                statusHTML = "-";
+            }
+
+            row.innerHTML = `<span><strong>${wordObj.en}</strong> (${wordObj.tr})</span> <span class="${rowClass}">${statusHTML}</span>`;
+            listDiv.appendChild(row);
+        });
+    }
+
+    function closeInspectScreen() {
+        showScreen('game-screen');
+    }
+
+    function startMistakeMode() {
+        mistakeQueue = [];
+        activeWordList.forEach((wordObj, i) => {
+            if (historyData[i] === 'wrong') {
+                mistakeQueue.push(i);
+            }
+        });
+
+        if (mistakeQueue.length === 0) {
+            alert("Harika! Bu grupta hiç yanlışınız yok.");
+            return;
+        }
+
+        isMistakeMode = true;
+        showScreen('game-screen');
+        askQuestion();
+    }
+</script>
+</body>
+</html>
