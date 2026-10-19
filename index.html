@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 Kelime & Kalıp Ustası (Genişletilmiş Sürüm)</title>
+    <title>🚀 Kelime & Kalıp Ustası (Dengeli Dağılım)</title>
     <style>
         * { 
             box-sizing: border-box; 
@@ -217,6 +217,38 @@
         .correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; }
         .wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; }
 
+        /* Klavye Giriş Modu Stilleri */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        #answer-input {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ced4da;
+            border-radius: 12px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        #answer-input:focus {
+            border-color: #3498db;
+        }
+        .btn-submit-input {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-submit-input:hover { background-color: #2980b9; transform: translateY(-2px); }
+
         #message { height: 25px; font-weight: bold; margin-top: 10px; font-size: 18px; }
 
         .modal-overlay { 
@@ -271,10 +303,15 @@
         <h2 id="question-word">Loading...</h2>
     </div>
     
-    <div class="options">
+    <div class="options" id="options-container">
         <button id="opt0" class="btn-option" onclick="checkAnswer(0)"></button>
         <button id="opt1" class="btn-option" onclick="checkAnswer(1)"></button>
         <button id="opt2" class="btn-option" onclick="checkAnswer(2)"></button>
+    </div>
+
+    <div class="input-container hidden" id="input-container">
+        <input type="text" id="answer-input" placeholder="Türkçe anlamını yazın..." autocomplete="off">
+        <button class="btn-submit-input" onclick="checkInputAnswer()">Cevapla</button>
     </div>
     
     <p id="message"></p>
@@ -317,7 +354,6 @@
 </div>
 
 <script>
-    // TAM 200 KELİME VE KALIP (Mushoku Tensei Vol.14 Odaklı)
     const wordDatabase = {
         "A1": [
             { en: "Family", tr: "Aile" }, { en: "Home", tr: "Ev" }, { en: "Room", tr: "Oda" },
@@ -352,8 +388,8 @@
             { en: "Apologize", tr: "Özür dilemek" }, { en: "Permission", tr: "İzin" }, { en: "Investigate", tr: "Soruşturmak / İncelemek" },
             { en: "Appreciate", tr: "Takdir etmek" }, { en: "Destination", tr: "Varış noktası" }, { en: "Corridor", tr: "Koridor" },
             { en: "Unconscious", tr: "Bilinçsiz / Baygın" }, { en: "Nightmare", tr: "Kabus" }, { en: "Knowledge", tr: "Bilgi" },
-            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader (D...)" },
-            { en: "Fate", tr: "Kader / Alınyazısı" }, { en: "Mistake", tr: "Hata" }, { en: "Forgive", tr: "Affetmek" }
+            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader" },
+            { en: "Fate", tr: "Alınyazısı" }, { en: "Mistake", tr: "Hata" }, { en: "Forgive", tr: "Affetmek" }
         ],
         "B2": [
             { en: "Consciousness", tr: "Bilinç" }, { en: "Despair", tr: "Umutsuzluk" }, { en: "Warning", tr: "Uyarı" },
@@ -362,7 +398,7 @@
             { en: "Immortal", tr: "Ölümsüz" }, { en: "Paralyzed", tr: "Felç olmuş" }, { en: "Resistance", tr: "Direnç" },
             { en: "Intimidating", tr: "Korkutucu" }, { en: "Atmosphere", tr: "Atmosfer / Ortam" }, { en: "Vengeance", tr: "İntikam" },
             { en: "Compassion", tr: "Şefkat" }, { en: "Relentless", tr: "Acımasız / Durmak bilmez" }, { en: "Overwhelming", tr: "Bunalatan / Ezici" },
-            { en: "Intervene", tr: "Müdahale etmek" }, { en: "Provoke", tr: "Kışkırtmak" }, { en: "Justification", tr: "Gerekçe / Haklı çıkarma" },
+            { en: "Intervene", tr: "Müdahale etmek" }, { en: "Provoke", tr: "Kışkırtmak" }, { en: "Justification", tr: "Gerekçe" },
             { en: "Solitude", tr: "Yalnızlık" }, { en: "Manipulate", tr: "Manipüle etmek" }, { en: "Deflect", tr: "Saptırmak / Yönünü değiştirmek" },
             { en: "Authority", tr: "Otorite / Yetki" }, { en: "Conflicted", tr: "Çelişkili / İkilemde kalmış" }, { en: "Encounter", tr: "Karşılaşma" },
             { en: "Grudge", tr: "Kin / Garez" }, { en: "Persuasive", tr: "İkna edici" }, { en: "Unfounded", tr: "Asılsız / Temelsiz" }
@@ -376,7 +412,7 @@
             { en: "Empathize", tr: "Empati kurmak" }, { en: "Promiscuity", tr: "Rastgele ilişki" }, { en: "Mumble", tr: "Mırıldanmak" },
             { en: "Plunder", tr: "Yağmalamak" }, { en: "Labyrinth", tr: "Labirent" }, { en: "Hallucination", tr: "Halüsinasyon" },
             { en: "Intricate", tr: "Karmaşık / İnce detaylı" }, { en: "Extinguish", tr: "Söndürmek" }, { en: "Unfathomable", tr: "Akıl almaz" },
-            { en: "Labyrinthine", tr: "Labirent gibi (karışık)" }, { en: "Dilapidated", tr: "Harap / Yıkık dökük" }, { en: "Premonition", tr: "Önsezi / İçine doğma" },
+            { en: "Labyrinthine", tr: "Labirent gibi" }, { en: "Dilapidated", tr: "Harap / Yıkık dökük" }, { en: "Premonition", tr: "Önsezi / İçine doğma" },
             { en: "Sullenly", tr: "Somurtarak" }, { en: "Formality", tr: "Resmiyet / Prosedür" }, { en: "Decoct", tr: "Kaynatarak özünü çıkarmak" }
         ],
         "C2": [
@@ -389,7 +425,7 @@
             { en: "Audacious", tr: "Gözüpek / Cüretkar" }, { en: "Indispensable", tr: "Vazgeçilmez" }, { en: "Paraphernalia", tr: "Teçhizat / Eşya" },
             { en: "Phantasm", tr: "Hayalet / Görüntü" }, { en: "Incessant", tr: "Aralıksız / Durmak bilmeyen" }, { en: "Pulverize", tr: "Paramparça etmek" },
             { en: "Prostrating", tr: "Yere kapanma / Secde etme" }, { en: "Dumbstruck", tr: "Dili tutulmuş / Apışıp kalmış" }, { en: "Uncowed", tr: "Yılmamış / Korkutulmamış" },
-            { en: "Voluptuous", tr: "Şehvet uyandıran / Kıvrımlı" }, { en: "Resigned", tr: "Boyun eğmiş / Kabullenmiş" }, { en: "Disheveled", tr: "Dağınık (saç/baş)" }
+            { en: "Voluptuous", tr: "Şehvet uyandıran / Kıvrımlı" }, { en: "Resigned", tr: "Boyun eğmiş / Kabullenmiş" }, { en: "Disheveled", tr: "Dağınık" }
         ],
         "Kalıplar": [
             { en: "Even if...", tr: "Se bile / ...sa bile" },
@@ -419,6 +455,8 @@
     let activeWordList = [];
     let currentWordObj = {};
     let currentWordIndex = 0;
+    
+    let currentQuestionType = 1; 
     let correctAnswerIndex = 0;
     
     let score = 0;
@@ -430,6 +468,14 @@
     let isMistakeMode = false;
     let mistakeQueue = [];
     let currentPool = []; 
+    let questionTypePool = [];
+
+    document.getElementById('answer-input').addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            checkInputAnswer();
+        }
+    });
 
     function showScreen(screenId) {
         document.getElementById('level-screen').classList.add('hidden');
@@ -474,12 +520,6 @@
         
         refillPool(); 
 
-        if(levelKey === "Kalıplar") {
-            document.getElementById('prompt-text').innerText = "BU KALIBIN ANLAMI NEDİR?";
-        } else {
-            document.getElementById('prompt-text').innerText = "BU KELİMENİN ANLAMI NEDİR?";
-        }
-
         updateScore();
         showScreen('game-screen');
         askQuestion();
@@ -491,6 +531,19 @@
             currentPool.push(i);
         }
         currentPool.sort(() => Math.random() - 0.5);
+
+        questionTypePool = [];
+        let totalWords = activeWordList.length;
+        let third = Math.floor(totalWords / 3);
+        let remainder = totalWords % 3;
+
+        for(let i=0; i<third; i++) {
+            questionTypePool.push(1, 2, 3);
+        }
+        for(let i=0; i<remainder; i++) {
+            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
+        }
+        questionTypePool.sort(() => Math.random() - 0.5);
     }
 
     function askQuestion() {
@@ -500,39 +553,66 @@
         for (let i = 0; i < 3; i++) {
             document.getElementById(`opt${i}`).className = "btn-option";
         }
+        
+        const inputField = document.getElementById("answer-input");
+        inputField.value = "";
+        inputField.style.borderColor = "#ced4da";
 
         if (isMistakeMode) {
             const randomIndex = Math.floor(Math.random() * mistakeQueue.length);
             currentWordIndex = mistakeQueue[randomIndex];
+            currentQuestionType = Math.floor(Math.random() * 3) + 1;
         } else {
             if (currentPool.length === 0) {
                 refillPool();
             }
             currentWordIndex = currentPool.pop();
+            currentQuestionType = questionTypePool.pop();
         }
 
         currentWordObj = activeWordList[currentWordIndex];
-        document.getElementById("question-word").innerText = currentWordObj.en;
 
-        correctAnswerIndex = Math.floor(Math.random() * 3);
+        if (currentQuestionType === 3) {
+            document.getElementById("options-container").classList.add("hidden");
+            document.getElementById("input-container").classList.remove("hidden");
+            
+            document.getElementById('prompt-text').innerText = "BU KELİMENİN ANLAMI NEDİR? (YAZIN)";
+            document.getElementById("question-word").innerText = currentWordObj.en;
+            
+            setTimeout(() => inputField.focus(), 100);
+            
+        } else {
+            document.getElementById("options-container").classList.remove("hidden");
+            document.getElementById("input-container").classList.add("hidden");
+            
+            correctAnswerIndex = Math.floor(Math.random() * 3);
+            let wrongOptions = activeWordList.filter(w => w.en !== currentWordObj.en);
+            wrongOptions.sort(() => Math.random() - 0.5);
 
-        let wrongOptions = activeWordList.filter(w => w.tr !== currentWordObj.tr);
-        wrongOptions.sort(() => Math.random() - 0.5);
+            let optionsArr = [];
+            let wrongCounter = 0;
 
-        let optionsArr = [];
-        let wrongCounter = 0;
-
-        for (let i = 0; i < 3; i++) {
-            if (i === correctAnswerIndex) {
-                optionsArr.push(currentWordObj.tr);
+            if (currentQuestionType === 1) {
+                document.getElementById('prompt-text').innerText = (currentLevelKey === "Kalıplar") ? "BU KALIBIN ANLAMI NEDİR?" : "BU KELİMENİN ANLAMI NEDİR?";
+                document.getElementById("question-word").innerText = currentWordObj.en;
+                
+                for (let i = 0; i < 3; i++) {
+                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.tr);
+                    else { optionsArr.push(wrongOptions[wrongCounter].tr); wrongCounter++; }
+                }
             } else {
-                optionsArr.push(wrongOptions[wrongCounter].tr);
-                wrongCounter++;
+                document.getElementById('prompt-text').innerText = "BU KELİMENİN İNGİLİZCESİ NEDİR?";
+                document.getElementById("question-word").innerText = currentWordObj.tr;
+                
+                for (let i = 0; i < 3; i++) {
+                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.en);
+                    else { optionsArr.push(wrongOptions[wrongCounter].en); wrongCounter++; }
+                }
             }
-        }
 
-        for (let i = 0; i < 3; i++) {
-            document.getElementById(`opt${i}`).innerText = optionsArr[i];
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`opt${i}`).innerText = optionsArr[i];
+            }
         }
     }
 
@@ -545,50 +625,94 @@
 
         if (selectedIndex === correctAnswerIndex) {
             selectedBtn.classList.add("correct");
-            document.getElementById("message").innerText = "Harika! 🎉";
-            document.getElementById("message").style.color = "#27ae60";
-            score += 10;
-            
-            if (isMistakeMode) {
-                historyData[currentWordIndex] = 'correct';
-                if (wrongCount > 0) wrongCount--;
-                correctCount++;
-                updateScore();
-
-                mistakeQueue = mistakeQueue.filter(m => m !== currentWordIndex);
-                
-                if (mistakeQueue.length === 0) {
-                    setTimeout(() => {
-                        isMistakeMode = false;
-                        document.getElementById('success-modal').classList.remove('hidden');
-                    }, 1000);
-                    return;
-                }
-            } else {
-                correctCount++; 
-                updateScore();
-                if(historyData[currentWordIndex] !== 'wrong') {
-                    historyData[currentWordIndex] = 'correct';
-                }
-            }
-
-            setTimeout(askQuestion, 1000); 
+            handleCorrectAnswer();
         } else {
             selectedBtn.classList.add("wrong");
             correctBtn.classList.add("correct");
+            handleWrongAnswer();
+        }
+    }
+
+    function checkInputAnswer() {
+        if (!isClickable) return; 
+        
+        const userInput = document.getElementById("answer-input").value;
+        if(userInput.trim() === "") return; 
+        
+        isClickable = false;
+        
+        let normalizedInput = userInput.toLocaleLowerCase('tr-TR').trim();
+        let cleanedCorrect = currentWordObj.tr.replace(/\([^)]*\)/g, '').toLocaleLowerCase('tr-TR');
+        let validAnswers = cleanedCorrect.split('/').map(s => s.trim());
+        validAnswers.push(currentWordObj.tr.toLocaleLowerCase('tr-TR').trim());
+
+        let isCorrect = validAnswers.includes(normalizedInput);
+
+        const inputField = document.getElementById("answer-input");
+        if (isCorrect) {
+            inputField.style.borderColor = "#27ae60";
+            inputField.style.backgroundColor = "#e8f8f5";
+            handleCorrectAnswer();
+            setTimeout(() => { inputField.style.backgroundColor = ""; }, 1000);
+        } else {
+            inputField.style.borderColor = "#c0392b";
+            inputField.style.backgroundColor = "#fdedec";
+            document.getElementById("message").innerText = `Yanlış! Doğrusu: ${currentWordObj.tr}`;
+            document.getElementById("message").style.color = "#c0392b";
+            handleWrongAnswer(true); 
+            setTimeout(() => { inputField.style.backgroundColor = ""; }, 1500);
+        }
+    }
+
+    function handleCorrectAnswer() {
+        document.getElementById("message").innerText = "Harika! 🎉";
+        document.getElementById("message").style.color = "#27ae60";
+        score += 10;
+        
+        if (isMistakeMode) {
+            historyData[currentWordIndex] = 'correct';
+            if (wrongCount > 0) wrongCount--;
+            correctCount++;
+            updateScore();
+
+            mistakeQueue = mistakeQueue.filter(m => m !== currentWordIndex);
+            
+            if (mistakeQueue.length === 0) {
+                setTimeout(() => {
+                    isMistakeMode = false;
+                    document.getElementById('success-modal').classList.remove('hidden');
+                }, 1000);
+                return;
+            }
+        } else {
+            correctCount++; 
+            updateScore();
+            if(historyData[currentWordIndex] !== 'wrong') {
+                historyData[currentWordIndex] = 'correct';
+            }
+        }
+
+        setTimeout(askQuestion, 1000); 
+    }
+
+    function handleWrongAnswer(skipMessageUpdate = false) {
+        if(!skipMessageUpdate) {
             document.getElementById("message").innerText = "Maalesef yanlış!";
             document.getElementById("message").style.color = "#c0392b";
-            wrongCount++; 
-            updateScore();
-            historyData[currentWordIndex] = 'wrong';
-
-            if (!isMistakeMode && !currentPool.includes(currentWordIndex)) {
-                currentPool.push(currentWordIndex); 
-                currentPool.sort(() => Math.random() - 0.5); 
-            }
-
-            setTimeout(askQuestion, 1500); 
         }
+        
+        wrongCount++; 
+        updateScore();
+        historyData[currentWordIndex] = 'wrong';
+
+        if (!isMistakeMode && !currentPool.includes(currentWordIndex)) {
+            currentPool.push(currentWordIndex); 
+            currentPool.sort(() => Math.random() - 0.5); 
+            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
+            questionTypePool.sort(() => Math.random() - 0.5);
+        }
+
+        setTimeout(askQuestion, skipMessageUpdate ? 2500 : 1500); 
     }
 
     function closeSuccessModal() {
