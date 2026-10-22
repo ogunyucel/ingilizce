@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 Kelime & Kalıp Ustası (Dengeli Dağılım)</title>
+    <title>🚀 Kelime & Kalıp Ustası (Ultimate Sürüm)</title>
     <style>
         * { 
             box-sizing: border-box; 
@@ -26,7 +26,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
             text-align: center; 
             width: 90%; 
-            max-width: 450px; 
+            max-width: 480px; 
             position: relative; 
             display: flex;
             flex-direction: column;
@@ -74,7 +74,7 @@
             grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
             margin-top: 10px;
-            max-height: 280px;
+            max-height: 350px;
             overflow-y: auto;
             padding-right: 5px;
         }
@@ -82,7 +82,7 @@
             background-color: #3498db; 
             color: white; 
             padding: 12px 0; 
-            font-size: 16px; 
+            font-size: 15px; 
             border: none; 
             border-radius: 10px; 
             cursor: pointer; 
@@ -145,11 +145,11 @@
             background: #f8f9fa;
             border-radius: 15px; 
             border: 2px solid #ecf0f1;
-            max-height: 220px;
+            max-height: 250px;
             overflow-y: auto;
         }
         .table-row { 
-            font-size: 14px; 
+            font-size: 13px; 
             font-weight: bold; 
             padding-bottom: 5px; 
             border-bottom: 1px dashed #ddd; 
@@ -204,7 +204,7 @@
             color: #2c3e50; 
             border: 2px solid #ced4da; 
             padding: 12px; 
-            font-size: 16px; 
+            font-size: 15px; 
             font-weight: bold; 
             border-radius: 12px;
             cursor: pointer; 
@@ -226,7 +226,7 @@
         }
         #answer-input {
             padding: 15px;
-            font-size: 18px;
+            font-size: 16px;
             border: 2px solid #ced4da;
             border-radius: 12px;
             text-align: center;
@@ -249,7 +249,7 @@
         }
         .btn-submit-input:hover { background-color: #2980b9; transform: translateY(-2px); }
 
-        #message { height: 25px; font-weight: bold; margin-top: 10px; font-size: 18px; }
+        #message { height: 25px; font-weight: bold; margin-top: 10px; font-size: 17px; }
 
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -264,10 +264,10 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
         }
         .success-modal-box { background-color: #fcfcf0; padding: 40px 20px; }
-        .success-text { font-size: 26px; font-weight: 900; color: #000; margin: 0; }
+        .success-text { font-size: 24px; font-weight: 900; color: #000; margin: 0; }
         .modal-buttons { display: flex; justify-content: space-between; gap: 15px; margin-top: 15px;}
         .btn-modal-end, .btn-modal-continue { 
-            flex: 1; padding: 12px 10px; font-size: 16px; font-weight: 800; 
+            flex: 1; padding: 12px 10px; font-size: 15px; font-weight: 800; 
             border-radius: 12px; cursor: pointer; background: transparent; 
         }
         .btn-modal-end { color: #e74c3c; border: 2px solid #e74c3c; }
@@ -354,451 +354,68 @@
 </div>
 
 <script>
+    // 50'ŞER KELİME: ANA ANLAM / YAN ANLAM
     const wordDatabase = {
         "A1": [
-            { en: "Family", tr: "Aile" }, { en: "Home", tr: "Ev" }, { en: "Room", tr: "Oda" },
-            { en: "Door", tr: "Kapı" }, { en: "Bed", tr: "Yatak" }, { en: "Table", tr: "Masa" },
-            { en: "Water", tr: "Su" }, { en: "Food", tr: "Yemek" }, { en: "Time", tr: "Zaman" },
-            { en: "Book", tr: "Kitap" }, { en: "Hand", tr: "El" }, { en: "Eye", tr: "Göz" },
-            { en: "Sword", tr: "Kılıç" }, { en: "King", tr: "Kral" }, { en: "Castle", tr: "Kale" },
-            { en: "Light", tr: "Işık" }, { en: "Dark", tr: "Karanlık" }, { en: "Fire", tr: "Ateş" },
-            { en: "Ice", tr: "Buz" }, { en: "Sky", tr: "Gökyüzü" }, { en: "Earth", tr: "Toprak / Yeryüzü" },
-            { en: "Father", tr: "Baba" }, { en: "Mother", tr: "Anne" }, { en: "Brother", tr: "Erkek Kardeş" },
-            { en: "Sister", tr: "Kız Kardeş" }, { en: "Son", tr: "Erkek Evlat" }, { en: "Daughter", tr: "Kız Evlat" },
-            { en: "Day", tr: "Gün" }, { en: "Night", tr: "Gece" }, { en: "City", tr: "Şehir" }
+            { en: "Family", tr: "Aile / Sülale" }, { en: "Home", tr: "Ev / Yuva" }, { en: "Room", tr: "Oda / Boşluk" },
+            { en: "Door", tr: "Kapı / Geçit" }, { en: "Bed", tr: "Yatak / Zemin" }, { en: "Table", tr: "Masa / Tablo" },
+            { en: "Water", tr: "Su / Sıvı" }, { en: "Food", tr: "Yemek / Gıda" }, { en: "Time", tr: "Zaman / Süre" },
+            { en: "Book", tr: "Kitap / Defter" }, { en: "Hand", tr: "El / Yardım" }, { en: "Eye", tr: "Göz / Görüş" },
+            { en: "Sword", tr: "Kılıç / Kesici Silah" }, { en: "King", tr: "Kral / Hükümdar" }, { en: "Castle", tr: "Kale / Şato" },
+            { en: "Light", tr: "Işık / Aydınlık" }, { en: "Dark", tr: "Karanlık / Koyu" }, { en: "Fire", tr: "Ateş / Yangın" },
+            { en: "Ice", tr: "Buz / Soğukluk" }, { en: "Sky", tr: "Gökyüzü / Sema" }, { en: "Earth", tr: "Toprak / Yeryüzü" },
+            { en: "Father", tr: "Baba / Ata" }, { en: "Mother", tr: "Anne / Kaynak" }, { en: "Brother", tr: "Erkek Kardeş / Birader" },
+            { en: "Sister", tr: "Kız Kardeş / Bacı" }, { en: "Son", tr: "Oğul / Erkek Evlat" }, { en: "Daughter", tr: "Kız / Kız Evlat" },
+            { en: "Day", tr: "Gün / Gündüz" }, { en: "Night", tr: "Gece / Akşam" }, { en: "City", tr: "Şehir / Kent" },
+            { en: "Man", tr: "Adam / İnsan" }, { en: "Woman", tr: "Kadın / Hanım" }, { en: "Boy", tr: "Oğlan / Erkek Çocuk" },
+            { en: "Girl", tr: "Kız Çocuk / Genç Kız" }, { en: "Head", tr: "Baş / Kafa" }, { en: "Leg", tr: "Bacak / Ayak" },
+            { en: "Arm", tr: "Kol / Silahlanmak" }, { en: "Sun", tr: "Güneş / Aydınlık" }, { en: "Moon", tr: "Ay / Uydu" },
+            { en: "Star", tr: "Yıldız / Ünlü" }, { en: "Tree", tr: "Ağaç / Odun" }, { en: "Road", tr: "Yol / Rota" },
+            { en: "Word", tr: "Kelime / Söz" }, { en: "Name", tr: "İsim / Ad" }, { en: "Life", tr: "Hayat / Yaşam" },
+            { en: "Death", tr: "Ölüm / Vefat" }, { en: "Friend", tr: "Arkadaş / Dost" }, { en: "Enemy", tr: "Düşman / Hasım" },
+            { en: "Animal", tr: "Hayvan / Yaratık" }, { en: "Bird", tr: "Kuş / Uçan Canlı" }
         ],
         "A2": [
-            { en: "Future", tr: "Gelecek" }, { en: "Past", tr: "Geçmiş" }, { en: "Journey", tr: "Yolculuk" },
-            { en: "Basement", tr: "Bodrum" }, { en: "Kitchen", tr: "Mutfak" }, { en: "Diary", tr: "Günlük" },
-            { en: "Friend", tr: "Arkadaş" }, { en: "Medicine", tr: "İlaç" }, { en: "Weapon", tr: "Silah" },
-            { en: "Guard", tr: "Muhafız" }, { en: "Soldier", tr: "Asker" }, { en: "Magic", tr: "Büyü" },
-            { en: "Monster", tr: "Canavar" }, { en: "Forest", tr: "Orman" }, { en: "Sand", tr: "Kum" },
-            { en: "Blood", tr: "Kan" }, { en: "Dangerous", tr: "Tehlikeli" }, { en: "Secret", tr: "Sır" },
-            { en: "Protect", tr: "Korumak" }, { en: "Attack", tr: "Saldırmak" }, { en: "Escape", tr: "Kaçmak" },
-            { en: "Understand", tr: "Anlamak" }, { en: "Believe", tr: "İnanmak" }, { en: "Dream", tr: "Rüya" },
-            { en: "Sleep", tr: "Uyumak" }, { en: "Laugh", tr: "Gülmek" }, { en: "Cry", tr: "Ağlamak" },
-            { en: "Wall", tr: "Duvar" }, { en: "Floor", tr: "Zemin" }, { en: "Stone", tr: "Taş" }
+            { en: "Future", tr: "Gelecek / İstikbal" }, { en: "Past", tr: "Geçmiş / Mazi" }, { en: "Journey", tr: "Yolculuk / Seyahat" },
+            { en: "Basement", tr: "Bodrum / Alt Kat" }, { en: "Kitchen", tr: "Mutfak / Aşevi" }, { en: "Diary", tr: "Günlük / Hatıra Defteri" },
+            { en: "Medicine", tr: "İlaç / Tıp" }, { en: "Weapon", tr: "Silah / Araç" }, { en: "Guard", tr: "Muhafız / Koruma" },
+            { en: "Soldier", tr: "Asker / Er" }, { en: "Magic", tr: "Büyü / Sihir" }, { en: "Monster", tr: "Canavar / Yaratık" },
+            { en: "Forest", tr: "Orman / Koru" }, { en: "Sand", tr: "Kum / Kumsal" }, { en: "Blood", tr: "Kan / Soy" },
+            { en: "Dangerous", tr: "Tehlikeli / Riskli" }, { en: "Secret", tr: "Sır / Gizem" }, { en: "Protect", tr: "Korumak / Muhafaza Etmek" },
+            { en: "Attack", tr: "Saldırmak / Hücum Etmek" }, { en: "Escape", tr: "Kaçmak / Firar Etmek" }, { en: "Understand", tr: "Anlamak / Kavramak" },
+            { en: "Believe", tr: "İnanmak / Güvenmek" }, { en: "Dream", tr: "Rüya / Hayal" }, { en: "Sleep", tr: "Uyumak / Uyku" },
+            { en: "Laugh", tr: "Gülmek / Kahkaha Atmak" }, { en: "Cry", tr: "Ağlamak / Bağırmak" }, { en: "Wall", tr: "Duvar / Engel" },
+            { en: "Floor", tr: "Zemin / Kat" }, { en: "Stone", tr: "Taş / Kaya" }, { en: "Power", tr: "Güç / İktidar" },
+            { en: "Fight", tr: "Dövüş / Kavga" }, { en: "Hero", tr: "Kahraman / Yiğit" }, { en: "Town", tr: "Kasaba / İlçe" },
+            { en: "Village", tr: "Köy / Kırsal" }, { en: "Voice", tr: "Ses / Seda" }, { en: "Shadow", tr: "Gölge / Karanlık" },
+            { en: "Truth", tr: "Hakikat / Gerçek" }, { en: "Lie", tr: "Yalan / Uzanmak" }, { en: "Mind", tr: "Zihin / Akıl" },
+            { en: "Body", tr: "Vücut / Beden" }, { en: "Heart", tr: "Kalp / Yürek" }, { en: "Soul", tr: "Ruh / Can" },
+            { en: "Defense", tr: "Savunma / Defans" }, { en: "Danger", tr: "Tehlike / Risk" }, { en: "Safe", tr: "Güvenli / Kasa" },
+            { en: "Hunt", tr: "Av / Avlanmak" }, { en: "Hide", tr: "Saklanmak / Gizlenmek" }, { en: "Rest", tr: "Dinlenmek / Kalan Kısım" },
+            { en: "Walk", tr: "Yürümek / Gezinmek" }, { en: "Run", tr: "Koşmak / Yönetmek" }
         ],
         "B1": [
-            { en: "Fortress", tr: "Hisar / Kale" }, { en: "Ruins", tr: "Kalıntılar" }, { en: "Teleportation", tr: "Işınlanma" },
-            { en: "Summoning", tr: "Çağırma" }, { en: "Curse", tr: "Lanet" }, { en: "Syndrome", tr: "Sendrom" },
-            { en: "Poison", tr: "Zehir" }, { en: "Discovery", tr: "Keşif" }, { en: "Promise", tr: "Söz vermek" },
-            { en: "Anxiety", tr: "Endişe" }, { en: "Exhausted", tr: "Tükenmiş" }, { en: "Silence", tr: "Sessizlik" },
-            { en: "Horizon", tr: "Ufuk" }, { en: "Dungeon", tr: "Zindan" }, { en: "Hesitate", tr: "Tereddüt etmek" },
-            { en: "Apologize", tr: "Özür dilemek" }, { en: "Permission", tr: "İzin" }, { en: "Investigate", tr: "Soruşturmak / İncelemek" },
-            { en: "Appreciate", tr: "Takdir etmek" }, { en: "Destination", tr: "Varış noktası" }, { en: "Corridor", tr: "Koridor" },
-            { en: "Unconscious", tr: "Bilinçsiz / Baygın" }, { en: "Nightmare", tr: "Kabus" }, { en: "Knowledge", tr: "Bilgi" },
-            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader" },
-            { en: "Fate", tr: "Alınyazısı" }, { en: "Mistake", tr: "Hata" }, { en: "Forgive", tr: "Affetmek" }
+            { en: "Fortress", tr: "Hisar / Kale" }, { en: "Ruins", tr: "Kalıntılar / Harabeler" }, { en: "Teleportation", tr: "Işınlanma / Aktarım" },
+            { en: "Summoning", tr: "Çağırma / Celp" }, { en: "Curse", tr: "Lanet / Beddua" }, { en: "Syndrome", tr: "Sendrom / Belirti Kümesi" },
+            { en: "Poison", tr: "Zehir / Zehirlemek" }, { en: "Discovery", tr: "Keşif / Buluş" }, { en: "Promise", tr: "Söz Vermek / Vaat" },
+            { en: "Anxiety", tr: "Endişe / Kaygı" }, { en: "Exhausted", tr: "Tükenmiş / Bitkin" }, { en: "Silence", tr: "Sessizlik / Sükunet" },
+            { en: "Horizon", tr: "Ufuk / Görüş Açısı" }, { en: "Dungeon", tr: "Zindan / Mahzen" }, { en: "Hesitate", tr: "Tereddüt Etmek / Duraksamak" },
+            { en: "Apologize", tr: "Özür Dilemek / Af Dilemek" }, { en: "Permission", tr: "İzin / Müsaade" }, { en: "Investigate", tr: "Soruşturmak / İncelemek" },
+            { en: "Appreciate", tr: "Takdir Etmek / Müteşekkir Olmak" }, { en: "Destination", tr: "Varış Noktası / Hedef" }, { en: "Corridor", tr: "Koridor / Geçit" },
+            { en: "Unconscious", tr: "Bilinçsiz / Baygın" }, { en: "Nightmare", tr: "Kabus / Kötü Rüya" }, { en: "Knowledge", tr: "Bilgi / İrfan" },
+            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader (İlahi) / Yazgı" },
+            { en: "Fate", tr: "Alınyazısı / Akıbet" }, { en: "Mistake", tr: "Hata / Yanılgı" }, { en: "Forgive", tr: "Affetmek / Bağışlamak" },
+            { en: "Ability", tr: "Yetenek / Kabiliyet" }, { en: "Skill", tr: "Beceri / Hüner" }, { en: "Talent", tr: "Doğuştan Yetenek / İstidat" },
+            { en: "Courage", tr: "Cesaret / Yüreklilik" }, { en: "Brave", tr: "Cesur / Yiğit" }, { en: "Coward", tr: "Korkak / Ödlek" },
+            { en: "Adventure", tr: "Macera / Serüven" }, { en: "Equipment", tr: "Ekipman / Teçhizat" }, { en: "Armor", tr: "Zırh / Koruma" },
+            { en: "Shield", tr: "Kalkan / Siper" }, { en: "Battle", tr: "Savaş / Muharebe" }, { en: "Defeat", tr: "Mağlubiyet / Yenmek" },
+            { en: "Victory", tr: "Zafer / Galibiyet" }, { en: "Honor", tr: "Onur / Şeref" }, { en: "Pride", tr: "Gurur / Kibir" },
+            { en: "Reward", tr: "Ödül / Mükafat" }, { en: "Punishment", tr: "Ceza / Eziyet" }, { en: "Guilt", tr: "Suçluluk / Kabahat" },
+            { en: "Innocent", tr: "Masum / Suçsuz" }, { en: "Survive", tr: "Hayatta Kalmak / Kurtulmak" }
         ],
         "B2": [
-            { en: "Consciousness", tr: "Bilinç" }, { en: "Despair", tr: "Umutsuzluk" }, { en: "Warning", tr: "Uyarı" },
-            { en: "Suspicious", tr: "Şüpheli" }, { en: "Strategy", tr: "Strateji" }, { en: "Opportunity", tr: "Fırsat" },
-            { en: "Prejudice", tr: "Önyargı" }, { en: "Responsibility", tr: "Sorumluluk" }, { en: "Architecture", tr: "Mimari" },
-            { en: "Immortal", tr: "Ölümsüz" }, { en: "Paralyzed", tr: "Felç olmuş" }, { en: "Resistance", tr: "Direnç" },
-            { en: "Intimidating", tr: "Korkutucu" }, { en: "Atmosphere", tr: "Atmosfer / Ortam" }, { en: "Vengeance", tr: "İntikam" },
-            { en: "Compassion", tr: "Şefkat" }, { en: "Relentless", tr: "Acımasız / Durmak bilmez" }, { en: "Overwhelming", tr: "Bunalatan / Ezici" },
-            { en: "Intervene", tr: "Müdahale etmek" }, { en: "Provoke", tr: "Kışkırtmak" }, { en: "Justification", tr: "Gerekçe" },
-            { en: "Solitude", tr: "Yalnızlık" }, { en: "Manipulate", tr: "Manipüle etmek" }, { en: "Deflect", tr: "Saptırmak / Yönünü değiştirmek" },
-            { en: "Authority", tr: "Otorite / Yetki" }, { en: "Conflicted", tr: "Çelişkili / İkilemde kalmış" }, { en: "Encounter", tr: "Karşılaşma" },
-            { en: "Grudge", tr: "Kin / Garez" }, { en: "Persuasive", tr: "İkna edici" }, { en: "Unfounded", tr: "Asılsız / Temelsiz" }
-        ],
-        "C1": [
-            { en: "Artifact", tr: "Büyülü Eşya / Eser" }, { en: "Incantation", tr: "Büyü Sözü / Tılsım" }, { en: "Pathogen", tr: "Patojen" },
-            { en: "Immunity", tr: "Bağışıklık" }, { en: "Battle Aura", tr: "Savaş Aurası" }, { en: "Disturb Magic", tr: "Büyü Bozma" },
-            { en: "Clairvoyance", tr: "Öngörü / Durugörü" }, { en: "Resemblance", tr: "Benzerlik" }, { en: "Coincidental", tr: "Tesadüfi" },
-            { en: "Imposing", tr: "Heybetli" }, { en: "Extravagant", tr: "Gösterişli / Lüks" }, { en: "Maniacal", tr: "Maniakal / Çılgınca" },
-            { en: "Acquaintance", tr: "Tanıdık" }, { en: "Contorted", tr: "Çarpılmış / Yüzü buruşmuş" }, { en: "Baffled", tr: "Şaşkına dönmüş" },
-            { en: "Empathize", tr: "Empati kurmak" }, { en: "Promiscuity", tr: "Rastgele ilişki" }, { en: "Mumble", tr: "Mırıldanmak" },
-            { en: "Plunder", tr: "Yağmalamak" }, { en: "Labyrinth", tr: "Labirent" }, { en: "Hallucination", tr: "Halüsinasyon" },
-            { en: "Intricate", tr: "Karmaşık / İnce detaylı" }, { en: "Extinguish", tr: "Söndürmek" }, { en: "Unfathomable", tr: "Akıl almaz" },
-            { en: "Labyrinthine", tr: "Labirent gibi" }, { en: "Dilapidated", tr: "Harap / Yıkık dökük" }, { en: "Premonition", tr: "Önsezi / İçine doğma" },
-            { en: "Sullenly", tr: "Somurtarak" }, { en: "Formality", tr: "Resmiyet / Prosedür" }, { en: "Decoct", tr: "Kaynatarak özünü çıkarmak" }
-        ],
-        "C2": [
-            { en: "Indescribable", tr: "Tarif edilemez" }, { en: "Oozing", tr: "Sızdıran / Yayan" }, { en: "Uncanny", tr: "Ürkütücü derecede tuhaf" },
-            { en: "Behemoth", tr: "Devasa yaratık" }, { en: "Opaque", tr: "Mat / Işık geçirmeyen" }, { en: "Protruding", tr: "Dışarı çıkık" },
-            { en: "Crotchety", tr: "Huysuz / Çabuk öfkelenen" }, { en: "Deferential", tr: "Hürmetkar" }, { en: "Tantamount", tr: "Eşdeğer" },
-            { en: "Flippant", tr: "Laubali / Ciddiyetsiz" }, { en: "Lackadaisical", tr: "Uyuşuk / Başından savan" }, { en: "Furtively", tr: "Gizlice" },
-            { en: "Emaciated", tr: "Bir deri bir kemik kalmış" }, { en: "Suffocating", tr: "Boğucu" }, { en: "Ashen", tr: "Kül rengi / Solgun" },
-            { en: "Purgatory", tr: "Araf" }, { en: "Insatiable", tr: "Doymak bilmez" }, { en: "Imbecile", tr: "Ahmak / Gerizekalı" },
-            { en: "Audacious", tr: "Gözüpek / Cüretkar" }, { en: "Indispensable", tr: "Vazgeçilmez" }, { en: "Paraphernalia", tr: "Teçhizat / Eşya" },
-            { en: "Phantasm", tr: "Hayalet / Görüntü" }, { en: "Incessant", tr: "Aralıksız / Durmak bilmeyen" }, { en: "Pulverize", tr: "Paramparça etmek" },
-            { en: "Prostrating", tr: "Yere kapanma / Secde etme" }, { en: "Dumbstruck", tr: "Dili tutulmuş / Apışıp kalmış" }, { en: "Uncowed", tr: "Yılmamış / Korkutulmamış" },
-            { en: "Voluptuous", tr: "Şehvet uyandıran / Kıvrımlı" }, { en: "Resigned", tr: "Boyun eğmiş / Kabullenmiş" }, { en: "Disheveled", tr: "Dağınık" }
-        ],
-        "Kalıplar": [
-            { en: "Even if...", tr: "Se bile / ...sa bile" },
-            { en: "As if / As though", tr: "Sanki / ...çıkcasına" },
-            { en: "So that...", tr: "-sın diye / -mesi için" },
-            { en: "By the way", tr: "Bu arada / laf aramızda" },
-            { en: "In the meantime", tr: "Bu esnada / bu sırada" },
-            { en: "At first glance", tr: "İlk bakışta" },
-            { en: "To make matters worse", tr: "Dahası / işin kötüsü" },
-            { en: "No matter how...", tr: "Ne kadar ...sa ...sın" },
-            { en: "Rather than...", tr: "-den ziyade / -mek yerine" },
-            { en: "As long as...", tr: "-diği sürece / -madığı sürece" },
-            { en: "In other words", tr: "Başka bir deyişle" },
-            { en: "On the other hand", tr: "Öte yandan" },
-            { en: "Without a doubt", tr: "Şüphesiz" },
-            { en: "For the sake of", tr: "Uğruna / Hatırına" },
-            { en: "In the blink of an eye", tr: "Göz açıp kapayıncaya kadar" },
-            { en: "All of a sudden", tr: "Aniden / Birdenbire" },
-            { en: "Out of nowhere", tr: "Hiçyoktan / Beklenmedik anda" },
-            { en: "Back and forth", tr: "İleri geri / Gidip gelerek" },
-            { en: "Up until now", tr: "Şimdiye kadar" },
-            { en: "To be honest", tr: "Dürüst olmak gerekirse" }
-        ]
-    };
-
-    let currentLevelKey = "A1";
-    let activeWordList = [];
-    let currentWordObj = {};
-    let currentWordIndex = 0;
-    
-    let currentQuestionType = 1; 
-    let correctAnswerIndex = 0;
-    
-    let score = 0;
-    let correctCount = 0; 
-    let wrongCount = 0;   
-    let isClickable = true; 
-    let historyData = {}; 
-
-    let isMistakeMode = false;
-    let mistakeQueue = [];
-    let currentPool = []; 
-    let questionTypePool = [];
-
-    document.getElementById('answer-input').addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            checkInputAnswer();
-        }
-    });
-
-    function showScreen(screenId) {
-        document.getElementById('level-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('inspect-screen').classList.add('hidden');
-        document.getElementById(screenId).classList.remove('hidden');
-    }
-
-    function generateLevelButtons() {
-        const levelsDiv = document.getElementById('levels');
-        levelsDiv.innerHTML = ""; 
-        const levels = ["A1", "A2", "B1", "B2", "C1", "C2"];
-        
-        levels.forEach(lvl => {
-            let btn = document.createElement('button');
-            btn.innerText = `Seviye ${lvl} (${wordDatabase[lvl].length} Kelime)`;
-            btn.className = "btn-level";
-            btn.onclick = () => startLevel(lvl);
-            levelsDiv.appendChild(btn);
-        });
-
-        let patternBtn = document.createElement('button');
-        patternBtn.innerText = `📖 Metin Kalıpları & Bağlaçlar (${wordDatabase["Kalıplar"].length} Adet)`;
-        patternBtn.className = "btn-level btn-patterns";
-        patternBtn.onclick = () => startLevel("Kalıplar");
-        levelsDiv.appendChild(patternBtn);
-    }
-    window.onload = generateLevelButtons;
-
-    function startLevel(levelKey) {
-        currentLevelKey = levelKey;
-        activeWordList = wordDatabase[levelKey];
-        
-        document.getElementById('level-display').innerText = levelKey;
-
-        score = 0;
-        correctCount = 0; 
-        wrongCount = 0;   
-        historyData = {};
-        isMistakeMode = false;
-        mistakeQueue = [];
-        
-        refillPool(); 
-
-        updateScore();
-        showScreen('game-screen');
-        askQuestion();
-    }
-
-    function refillPool() {
-        currentPool = [];
-        for (let i = 0; i < activeWordList.length; i++) {
-            currentPool.push(i);
-        }
-        currentPool.sort(() => Math.random() - 0.5);
-
-        questionTypePool = [];
-        let totalWords = activeWordList.length;
-        let third = Math.floor(totalWords / 3);
-        let remainder = totalWords % 3;
-
-        for(let i=0; i<third; i++) {
-            questionTypePool.push(1, 2, 3);
-        }
-        for(let i=0; i<remainder; i++) {
-            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
-        }
-        questionTypePool.sort(() => Math.random() - 0.5);
-    }
-
-    function askQuestion() {
-        isClickable = true;
-        document.getElementById("message").innerText = "";
-        
-        for (let i = 0; i < 3; i++) {
-            document.getElementById(`opt${i}`).className = "btn-option";
-        }
-        
-        const inputField = document.getElementById("answer-input");
-        inputField.value = "";
-        inputField.style.borderColor = "#ced4da";
-
-        if (isMistakeMode) {
-            const randomIndex = Math.floor(Math.random() * mistakeQueue.length);
-            currentWordIndex = mistakeQueue[randomIndex];
-            currentQuestionType = Math.floor(Math.random() * 3) + 1;
-        } else {
-            if (currentPool.length === 0) {
-                refillPool();
-            }
-            currentWordIndex = currentPool.pop();
-            currentQuestionType = questionTypePool.pop();
-        }
-
-        currentWordObj = activeWordList[currentWordIndex];
-
-        if (currentQuestionType === 3) {
-            document.getElementById("options-container").classList.add("hidden");
-            document.getElementById("input-container").classList.remove("hidden");
-            
-            document.getElementById('prompt-text').innerText = "BU KELİMENİN ANLAMI NEDİR? (YAZIN)";
-            document.getElementById("question-word").innerText = currentWordObj.en;
-            
-            setTimeout(() => inputField.focus(), 100);
-            
-        } else {
-            document.getElementById("options-container").classList.remove("hidden");
-            document.getElementById("input-container").classList.add("hidden");
-            
-            correctAnswerIndex = Math.floor(Math.random() * 3);
-            let wrongOptions = activeWordList.filter(w => w.en !== currentWordObj.en);
-            wrongOptions.sort(() => Math.random() - 0.5);
-
-            let optionsArr = [];
-            let wrongCounter = 0;
-
-            if (currentQuestionType === 1) {
-                document.getElementById('prompt-text').innerText = (currentLevelKey === "Kalıplar") ? "BU KALIBIN ANLAMI NEDİR?" : "BU KELİMENİN ANLAMI NEDİR?";
-                document.getElementById("question-word").innerText = currentWordObj.en;
-                
-                for (let i = 0; i < 3; i++) {
-                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.tr);
-                    else { optionsArr.push(wrongOptions[wrongCounter].tr); wrongCounter++; }
-                }
-            } else {
-                document.getElementById('prompt-text').innerText = "BU KELİMENİN İNGİLİZCESİ NEDİR?";
-                document.getElementById("question-word").innerText = currentWordObj.tr;
-                
-                for (let i = 0; i < 3; i++) {
-                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.en);
-                    else { optionsArr.push(wrongOptions[wrongCounter].en); wrongCounter++; }
-                }
-            }
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`opt${i}`).innerText = optionsArr[i];
-            }
-        }
-    }
-
-    function checkAnswer(selectedIndex) {
-        if (!isClickable) return; 
-        isClickable = false;
-
-        const selectedBtn = document.getElementById(`opt${selectedIndex}`);
-        const correctBtn = document.getElementById(`opt${correctAnswerIndex}`);
-
-        if (selectedIndex === correctAnswerIndex) {
-            selectedBtn.classList.add("correct");
-            handleCorrectAnswer();
-        } else {
-            selectedBtn.classList.add("wrong");
-            correctBtn.classList.add("correct");
-            handleWrongAnswer();
-        }
-    }
-
-    function checkInputAnswer() {
-        if (!isClickable) return; 
-        
-        const userInput = document.getElementById("answer-input").value;
-        if(userInput.trim() === "") return; 
-        
-        isClickable = false;
-        
-        let normalizedInput = userInput.toLocaleLowerCase('tr-TR').trim();
-        let cleanedCorrect = currentWordObj.tr.replace(/\([^)]*\)/g, '').toLocaleLowerCase('tr-TR');
-        let validAnswers = cleanedCorrect.split('/').map(s => s.trim());
-        validAnswers.push(currentWordObj.tr.toLocaleLowerCase('tr-TR').trim());
-
-        let isCorrect = validAnswers.includes(normalizedInput);
-
-        const inputField = document.getElementById("answer-input");
-        if (isCorrect) {
-            inputField.style.borderColor = "#27ae60";
-            inputField.style.backgroundColor = "#e8f8f5";
-            handleCorrectAnswer();
-            setTimeout(() => { inputField.style.backgroundColor = ""; }, 1000);
-        } else {
-            inputField.style.borderColor = "#c0392b";
-            inputField.style.backgroundColor = "#fdedec";
-            document.getElementById("message").innerText = `Yanlış! Doğrusu: ${currentWordObj.tr}`;
-            document.getElementById("message").style.color = "#c0392b";
-            handleWrongAnswer(true); 
-            setTimeout(() => { inputField.style.backgroundColor = ""; }, 1500);
-        }
-    }
-
-    function handleCorrectAnswer() {
-        document.getElementById("message").innerText = "Harika! 🎉";
-        document.getElementById("message").style.color = "#27ae60";
-        score += 10;
-        
-        if (isMistakeMode) {
-            historyData[currentWordIndex] = 'correct';
-            if (wrongCount > 0) wrongCount--;
-            correctCount++;
-            updateScore();
-
-            mistakeQueue = mistakeQueue.filter(m => m !== currentWordIndex);
-            
-            if (mistakeQueue.length === 0) {
-                setTimeout(() => {
-                    isMistakeMode = false;
-                    document.getElementById('success-modal').classList.remove('hidden');
-                }, 1000);
-                return;
-            }
-        } else {
-            correctCount++; 
-            updateScore();
-            if(historyData[currentWordIndex] !== 'wrong') {
-                historyData[currentWordIndex] = 'correct';
-            }
-        }
-
-        setTimeout(askQuestion, 1000); 
-    }
-
-    function handleWrongAnswer(skipMessageUpdate = false) {
-        if(!skipMessageUpdate) {
-            document.getElementById("message").innerText = "Maalesef yanlış!";
-            document.getElementById("message").style.color = "#c0392b";
-        }
-        
-        wrongCount++; 
-        updateScore();
-        historyData[currentWordIndex] = 'wrong';
-
-        if (!isMistakeMode && !currentPool.includes(currentWordIndex)) {
-            currentPool.push(currentWordIndex); 
-            currentPool.sort(() => Math.random() - 0.5); 
-            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
-            questionTypePool.sort(() => Math.random() - 0.5);
-        }
-
-        setTimeout(askQuestion, skipMessageUpdate ? 2500 : 1500); 
-    }
-
-    function closeSuccessModal() {
-        document.getElementById('success-modal').classList.add('hidden');
-        askQuestion();
-        openInspectScreen();
-    }
-
-    function updateScore() {
-        document.getElementById('score').innerText = score;
-        document.getElementById('correct-count').innerText = correctCount;
-        document.getElementById('wrong-count').innerText = wrongCount;
-    }
-
-    function endGame() {
-        if (isMistakeMode) {
-            isMistakeMode = false;
-            openInspectScreen(); 
-        } else {
-            document.getElementById('custom-confirm-modal').classList.remove('hidden');
-        }
-    }
-
-    function confirmEndGame() {
-        document.getElementById('custom-confirm-modal').classList.add('hidden');
-        showScreen('level-screen');
-    }
-
-    function cancelEndGame() {
-        document.getElementById('custom-confirm-modal').classList.add('hidden');
-    }
-
-    function openInspectScreen() {
-        showScreen('inspect-screen');
-        
-        document.getElementById('insp-score').innerText = score;
-        document.getElementById('insp-correct').innerText = correctCount;
-        document.getElementById('insp-wrong').innerText = wrongCount;
-        document.getElementById('insp-level-title').innerText = currentLevelKey;
-
-        const listDiv = document.getElementById('table-list');
-        listDiv.innerHTML = "";
-
-        activeWordList.forEach((wordObj, i) => {
-            let row = document.createElement('div');
-            row.className = "table-row";
-            
-            let statusHTML = "";
-            let rowClass = "row-unanswered";
-
-            if (historyData[i] === 'correct') {
-                statusHTML = "✔ Doğru";
-                rowClass = "row-correct";
-            } else if (historyData[i] === 'wrong') {
-                statusHTML = "✖ Yanlış";
-                rowClass = "row-wrong";
-            } else {
-                statusHTML = "-";
-            }
-
-            row.innerHTML = `<span><strong>${wordObj.en}</strong> (${wordObj.tr})</span> <span class="${rowClass}">${statusHTML}</span>`;
-            listDiv.appendChild(row);
-        });
-    }
-
-    function closeInspectScreen() {
-        showScreen('game-screen');
-    }
-
-    function startMistakeMode() {
-        mistakeQueue = [];
-        activeWordList.forEach((wordObj, i) => {
-            if (historyData[i] === 'wrong') {
-                mistakeQueue.push(i);
-            }
-        });
-
-        if (mistakeQueue.length === 0) {
-            alert("Harika! Bu grupta hiç yanlışınız yok.");
-            return;
-        }
-
-        isMistakeMode = true;
-        showScreen('game-screen');
-        askQuestion();
-    }
-</script>
-</body>
-</html>
+            { en: "Consciousness", tr: "Bilinç / Şuur" }, { en: "Despair", tr: "Umutsuzluk / Çaresizlik" }, { en: "Warning", tr: "Uyarı / İkaz" },
+            { en: "Suspicious", tr: "Şüpheli / Kuşkulu" }, { en: "Strategy", tr: "Strateji / Plan" }, { en: "Opportunity", tr: "Fırsat / Şans" },
+            { en: "Prejudice", tr: "Önyargı / Peşin Hüküm" }, { en: "Responsibility", tr: "Sorumluluk / Mesuliyet" }, { en: "Architecture", tr: "Mimari / Yapı Sanatı" },
+            { en: "Immortal", tr: "Ölümsüz / Baki" }, { en: "Paralyzed", tr: "Felç Olmuş / Kilitlenmiş" }, { en: "Resistance", tr: "Direnç / Karşı Koyma" },
+            { en: "Intimidating", tr: "Korkutucu / Göz Dağı Veren" }, { en: "Atmosphere", tr: "Atmosfer / Ortam" }, { en: "Vengeance", tr: "İntikam / Öç
