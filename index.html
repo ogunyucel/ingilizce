@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 Kelime & Kalıp Ustası (Ultimate Sürüm)</title>
+    <title>📖 Mushoku Tensei: Cümle & Kalıp Ustası</title>
     <style>
         * { 
             box-sizing: border-box; 
@@ -14,19 +14,20 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
+            min-height: 100vh; 
             margin: 0; 
+            padding: 15px;
             background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%); 
         }
         
         .container { 
             background: white; 
-            padding: 30px; 
+            padding: 28px; 
             border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
             text-align: center; 
-            width: 90%; 
-            max-width: 480px; 
+            width: 100%; 
+            max-width: 560px; 
             position: relative; 
             display: flex;
             flex-direction: column;
@@ -34,15 +35,15 @@
 
         h1 { 
             color: #2c3e50; 
-            margin-bottom: 10px; 
-            font-size: clamp(24px, 6vw, 34px); 
+            margin-bottom: 8px; 
+            font-size: clamp(22px, 5vw, 30px); 
         }
         
         .level-subtitle { 
             color: #34495e; 
             font-weight: 600; 
             margin-bottom: 20px; 
-            font-size: clamp(14px, 4vw, 18px); 
+            font-size: clamp(13px, 3.8vw, 16px); 
             line-height: 1.4;
         }
         
@@ -74,14 +75,11 @@
             grid-template-columns: repeat(2, 1fr); 
             gap: 10px; 
             margin-top: 10px;
-            max-height: 350px;
-            overflow-y: auto;
-            padding-right: 5px;
         }
         .btn-level { 
             background-color: #3498db; 
             color: white; 
-            padding: 12px 0; 
+            padding: 14px 10px; 
             font-size: 15px; 
             border: none; 
             border-radius: 10px; 
@@ -101,10 +99,10 @@
 
         #score-board { 
             margin-bottom: 15px; 
-            margin-top: 35px; 
+            margin-top: 30px; 
             background: #f8f9fa; 
-            padding: 15px; 
-            padding-right: 50px; 
+            padding: 14px; 
+            padding-right: 55px; 
             border-radius: 15px; 
             display: flex; 
             flex-direction: column;
@@ -115,7 +113,7 @@
         }
         #score-board:hover { background-color: #e9ecef; }
         
-        .main-stats { font-size: 16px; font-weight: bold; color: #2c3e50; }
+        .main-stats { font-size: 15px; font-weight: bold; color: #2c3e50; }
         .sub-stats { font-size: 14px; font-weight: bold; display: flex; justify-content: center; gap: 8px; align-items: center;}
         
         .stat-correct { color: #27ae60; }
@@ -125,7 +123,7 @@
         .btn-inspect {
             position: absolute; 
             top: 50%; 
-            right: 10px; 
+            right: 12px; 
             transform: translateY(-50%);
             display: flex; 
             flex-direction: column;
@@ -136,36 +134,170 @@
         }
         .btn-inspect span { font-size: 20px; margin-bottom: 2px; }
 
+        /* Cümle Alanı ve Tıklanabilir Kelimeler */
+        #word-container {
+            background: #f1f2f6;
+            padding: 26px 18px 20px 18px;
+            border-radius: 15px;
+            margin: 10px 0 15px 0;
+            border: 2px solid #ced4da;
+            position: relative;
+        }
+
+        .hint-banner {
+            font-size: 12px;
+            color: #576574;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .sentence-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.8;
+        }
+
+        .word-token {
+            position: relative;
+            display: inline-block;
+            font-size: 20px;
+            font-weight: 800;
+            color: #2c3e50;
+            padding: 2px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border-bottom: 2px dotted #95a5a6;
+            user-select: none;
+        }
+
+        .word-token:hover, .word-token.active-word {
+            background-color: #3498db;
+            color: white;
+            border-bottom-color: transparent;
+        }
+
+        /* Kelime Üstü Çeviri Balonu (Tooltip) */
+        .word-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            z-index: 200;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            pointer-events: none;
+            animation: fadeInTooltip 0.18s ease-out;
+        }
+
+        .word-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2c3e50 transparent transparent transparent;
+        }
+
+        @keyframes fadeInTooltip {
+            from { opacity: 0; transform: translate(-50%, 5px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        .btn-speak-sentence {
+            margin-top: 12px;
+            background: #e2e6ea;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-speak-sentence:hover {
+            background: #d1d8e0;
+            transform: scale(1.04);
+        }
+
+        /* Şıklar */
+        .options { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 5px; 
+        }
+
+        .btn-option { 
+            background-color: #ffffff; 
+            color: #2c3e50; 
+            border: 2px solid #ced4da; 
+            padding: 14px 16px; 
+            font-size: 15px; 
+            font-weight: 700; 
+            border-radius: 12px;
+            cursor: pointer; 
+            transition: 0.25s; 
+            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+            text-align: left;
+            line-height: 1.4;
+        }
+        .btn-option:hover { background-color: #e2e6ea; transform: translateY(-2px); }
+        
+        .correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; }
+        .wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; }
+
+        #message { min-height: 25px; font-weight: bold; margin-top: 12px; font-size: 16px; }
+
+        /* İnceleme Listesi */
         .table-list {
             display: flex; 
             flex-direction: column; 
-            gap: 8px;
+            gap: 10px;
             margin-top: 15px; 
             padding: 12px; 
             background: #f8f9fa;
             border-radius: 15px; 
             border: 2px solid #ecf0f1;
-            max-height: 250px;
+            max-height: 280px;
             overflow-y: auto;
         }
         .table-row { 
             font-size: 13px; 
-            font-weight: bold; 
-            padding-bottom: 5px; 
+            font-weight: 600; 
+            padding-bottom: 8px; 
             border-bottom: 1px dashed #ddd; 
             text-align: left; 
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 10px;
         }
-        .row-correct { color: #27ae60; }
-        .row-wrong { color: #e74c3c; }
-        .row-unanswered { color: #7f8c8d; }
+        .row-correct { color: #27ae60; font-weight: bold; white-space: nowrap; }
+        .row-wrong { color: #e74c3c; font-weight: bold; white-space: nowrap; }
+        .row-unanswered { color: #7f8c8d; white-space: nowrap; }
 
         .btn-mistakes {
             background-color: #e67e22; 
             color: white; 
-            padding: 12px; 
-            font-size: 18px;
+            padding: 13px; 
+            font-size: 16px;
             border: none; 
             border-radius: 10px; 
             cursor: pointer; 
@@ -175,81 +307,6 @@
             transition: 0.3s;
         }
         .btn-mistakes:hover { background-color: #d35400; transform: translateY(-2px); }
-
-        #word-container {
-            background: #f1f2f6;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border: 2px solid #ced4da;
-        }
-
-        #question-word { 
-            font-size: 24px; 
-            font-weight: 900; 
-            color: #2c3e50; 
-            margin: 0;
-            word-break: break-word;
-        }
-
-        .options { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            margin-top: 15px; 
-        }
-
-        .btn-option { 
-            background-color: #ffffff; 
-            color: #2c3e50; 
-            border: 2px solid #ced4da; 
-            padding: 12px; 
-            font-size: 15px; 
-            font-weight: bold; 
-            border-radius: 12px;
-            cursor: pointer; 
-            transition: 0.3s; 
-            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .btn-option:hover { background-color: #e2e6ea; transform: translateY(-2px); }
-        
-        .correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; }
-        .wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; }
-
-        /* Klavye Giriş Modu Stilleri */
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        #answer-input {
-            padding: 15px;
-            font-size: 16px;
-            border: 2px solid #ced4da;
-            border-radius: 12px;
-            text-align: center;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        #answer-input:focus {
-            border-color: #3498db;
-        }
-        .btn-submit-input {
-            background-color: #3498db;
-            color: white;
-            padding: 12px;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .btn-submit-input:hover { background-color: #2980b9; transform: translateY(-2px); }
-
-        #message { height: 25px; font-weight: bold; margin-top: 10px; font-size: 17px; }
 
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -263,8 +320,8 @@
             text-align: center; width: 90%; max-width: 380px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
         }
-        .success-modal-box { background-color: #fcfcf0; padding: 40px 20px; }
-        .success-text { font-size: 24px; font-weight: 900; color: #000; margin: 0; }
+        .success-modal-box { background-color: #fcfcf0; padding: 35px 20px; }
+        .success-text { font-size: 22px; font-weight: 900; color: #000; margin: 0; }
         .modal-buttons { display: flex; justify-content: space-between; gap: 15px; margin-top: 15px;}
         .btn-modal-end, .btn-modal-continue { 
             flex: 1; padding: 12px 10px; font-size: 15px; font-weight: 800; 
@@ -274,11 +331,11 @@
         .btn-modal-continue { color: #2ecc71; border: 2px solid #2ecc71; }
     </style>
 </head>
-<body>
+<body onclick="clearAllTooltips()">
 
 <div id="level-screen" class="container">
-    <h1>🚀 Kelime & Kalıp Ustası</h1>
-    <p class="level-subtitle">Seviyeni Seç veya Metin Kalıplarını Çalış,<br>Mushoku Tensei'yi Akıcı Oku!</p>
+    <h1>📖 Cümle & Kalıp Ustası</h1>
+    <p class="level-subtitle">Mushoku Tensei Vol. 14 Cümleleriyle Pratik Yap!<br><small>(Cümledeki kelimelere tıklayarak anlamlarını görebilirsin)</small></p>
     <div class="level-grid" id="levels"></div>
 </div>
 
@@ -286,7 +343,7 @@
     <button class="btn-close" onclick="endGame()">×</button>
     
     <div id="score-board" onclick="openInspectScreen()">
-        <div class="main-stats">Bölüm: <span id="level-display">A1</span> | Skor: <span id="score">0</span></div>
+        <div class="main-stats">Seviye: <span id="level-display">A1</span> | Skor: <span id="score">0</span></div>
         <div class="sub-stats">
             <span class="stat-correct">✔ Doğru: <span id="correct-count">0</span></span>
             <span class="stat-divider">|</span>
@@ -299,19 +356,15 @@
     </div>
 
     <div id="word-container">
-        <p style="font-size: 13px; color: #7f8c8d; margin: 0 0 5px 0; font-weight: bold;" id="prompt-text">BU KELİMENİN ANLAMI NEDİR?</p>
-        <h2 id="question-word">Loading...</h2>
+        <p class="hint-banner">💡 ANLAMINI GÖRMEK İSTEDİĞİN KELİMEYE TIKLA</p>
+        <div id="sentence-box" class="sentence-box"></div>
+        <button class="btn-speak-sentence" onclick="speakCurrentSentence(event)">🔊 Tüm Cümleyi Dinle</button>
     </div>
     
     <div class="options" id="options-container">
         <button id="opt0" class="btn-option" onclick="checkAnswer(0)"></button>
         <button id="opt1" class="btn-option" onclick="checkAnswer(1)"></button>
         <button id="opt2" class="btn-option" onclick="checkAnswer(2)"></button>
-    </div>
-
-    <div class="input-container hidden" id="input-container">
-        <input type="text" id="answer-input" placeholder="Türkçe anlamını yazın..." autocomplete="off">
-        <button class="btn-submit-input" onclick="checkInputAnswer()">Cevapla</button>
     </div>
     
     <p id="message"></p>
@@ -321,7 +374,7 @@
     <button class="btn-close" onclick="closeInspectScreen()">×</button>
     
     <div id="score-board" style="padding-right: 15px; cursor: default;">
-        <div class="main-stats">Bölüm: <span id="insp-level-title">A1</span> | Skor: <span id="insp-score">0</span></div>
+        <div class="main-stats">Seviye: <span id="insp-level-title">A1</span> | Skor: <span id="insp-score">0</span></div>
         <div class="sub-stats">
             <span class="stat-correct">✔ Doğru: <span id="insp-correct">0</span></span>
             <span class="stat-divider">|</span>
@@ -329,7 +382,7 @@
         </div>
     </div>
 
-    <h3 style="color: #2c3e50; margin: 5px 0;" id="insp-header-text">Liste Durumu</h3>
+    <h3 style="color: #2c3e50; margin: 5px 0;">Cümle Listesi Durumu</h3>
     
     <div id="table-list" class="table-list"></div>
 
@@ -338,7 +391,7 @@
 
 <div id="custom-confirm-modal" class="modal-overlay hidden">
     <div class="modal-box">
-        <h3 style="color: #2c3e50; margin-top: 0;">Oyundan çıkmak istiyor musun?</h3>
+        <h3 style="color: #2c3e50; margin-top: 0;">Ana menüye dönmek istiyor musun?</h3>
         <div class="modal-buttons">
             <button class="btn-modal-end" onclick="confirmEndGame()">Evet, Çık</button>
             <button class="btn-modal-continue" onclick="cancelEndGame()">Devam Et</button>
@@ -354,162 +407,171 @@
 </div>
 
 <script>
-    // 50'ŞER KELİME: ANA ANLAM / YAN ANLAM
-    const wordDatabase = {
+    // MUSHOKU TENSEI VOL. 14 CÜMLE VERİTABANI
+    const sentenceDatabase = {
         "A1": [
-            { en: "Family", tr: "Aile / Sülale" }, { en: "Home", tr: "Ev / Yuva" }, { en: "Room", tr: "Oda / Boşluk" },
-            { en: "Door", tr: "Kapı / Geçit" }, { en: "Bed", tr: "Yatak / Zemin" }, { en: "Table", tr: "Masa / Tablo" },
-            { en: "Water", tr: "Su / Sıvı" }, { en: "Food", tr: "Yemek / Gıda" }, { en: "Time", tr: "Zaman / Süre" },
-            { en: "Book", tr: "Kitap / Defter" }, { en: "Hand", tr: "El / Yardım" }, { en: "Eye", tr: "Göz / Görüş" },
-            { en: "Sword", tr: "Kılıç / Kesici Silah" }, { en: "King", tr: "Kral / Hükümdar" }, { en: "Castle", tr: "Kale / Şato" },
-            { en: "Light", tr: "Işık / Aydınlık" }, { en: "Dark", tr: "Karanlık / Koyu" }, { en: "Fire", tr: "Ateş / Yangın" },
-            { en: "Ice", tr: "Buz / Soğukluk" }, { en: "Sky", tr: "Gökyüzü / Sema" }, { en: "Earth", tr: "Toprak / Yeryüzü" },
-            { en: "Father", tr: "Baba / Ata" }, { en: "Mother", tr: "Anne / Kaynak" }, { en: "Brother", tr: "Erkek Kardeş / Birader" },
-            { en: "Sister", tr: "Kız Kardeş / Bacı" }, { en: "Son", tr: "Oğul / Erkek Evlat" }, { en: "Daughter", tr: "Kız / Kız Evlat" },
-            { en: "Day", tr: "Gün / Gündüz" }, { en: "Night", tr: "Gece / Akşam" }, { en: "City", tr: "Şehir / Kent" },
-            { en: "Man", tr: "Adam / İnsan" }, { en: "Woman", tr: "Kadın / Hanım" }, { en: "Boy", tr: "Oğlan / Erkek Çocuk" },
-            { en: "Girl", tr: "Kız Çocuk / Genç Kız" }, { en: "Head", tr: "Baş / Kafa" }, { en: "Leg", tr: "Bacak / Ayak" },
-            { en: "Arm", tr: "Kol / Silahlanmak" }, { en: "Sun", tr: "Güneş / Aydınlık" }, { en: "Moon", tr: "Ay / Uydu" },
-            { en: "Star", tr: "Yıldız / Ünlü" }, { en: "Tree", tr: "Ağaç / Odun" }, { en: "Road", tr: "Yol / Rota" },
-            { en: "Word", tr: "Kelime / Söz" }, { en: "Name", tr: "İsim / Ad" }, { en: "Life", tr: "Hayat / Yaşam" },
-            { en: "Death", tr: "Ölüm / Vefat" }, { en: "Friend", tr: "Arkadaş / Dost" }, { en: "Enemy", tr: "Düşman / Hasım" },
-            { en: "Animal", tr: "Hayvan / Yaratık" }, { en: "Bird", tr: "Kuş / Uçan Canlı" }
+            { en: "Rudeus has a big family.", tr: "Rudeus'un büyük bir ailesi var." },
+            { en: "The castle is in the sky.", tr: "Kale gökyüzündedir." },
+            { en: "Roxy stays at home today.", tr: "Roxy bugün evde kalıyor." },
+            { en: "Perugius is a strong king.", tr: "Perugius güçlü bir kraldır." },
+            { en: "Nanahoshi drinks hot tea in bed.", tr: "Nanahoshi yatakta sıcak çay içer." },
+            { en: "The white room is very cold.", tr: "Beyaz oda çok soğuktur." },
+            { en: "Zanoba loves old dolls and statues.", tr: "Zanoba eski bebekleri ve heykelleri sever." },
+            { en: "Cliff and Elinalise walk together.", tr: "Cliff ve Elinalise birlikte yürür." },
+            { en: "Aisha is in the kitchen now.", tr: "Aisha şu an mutfaktadır." },
+            { en: "The old man has white hair.", tr: "Yaşlı adamın beyaz saçları var." }
         ],
         "A2": [
-            { en: "Future", tr: "Gelecek / İstikbal" }, { en: "Past", tr: "Geçmiş / Mazi" }, { en: "Journey", tr: "Yolculuk / Seyahat" },
-            { en: "Basement", tr: "Bodrum / Alt Kat" }, { en: "Kitchen", tr: "Mutfak / Aşevi" }, { en: "Diary", tr: "Günlük / Hatıra Defteri" },
-            { en: "Medicine", tr: "İlaç / Tıp" }, { en: "Weapon", tr: "Silah / Araç" }, { en: "Guard", tr: "Muhafız / Koruma" },
-            { en: "Soldier", tr: "Asker / Er" }, { en: "Magic", tr: "Büyü / Sihir" }, { en: "Monster", tr: "Canavar / Yaratık" },
-            { en: "Forest", tr: "Orman / Koru" }, { en: "Sand", tr: "Kum / Kumsal" }, { en: "Blood", tr: "Kan / Soy" },
-            { en: "Dangerous", tr: "Tehlikeli / Riskli" }, { en: "Secret", tr: "Sır / Gizem" }, { en: "Protect", tr: "Korumak / Muhafaza Etmek" },
-            { en: "Attack", tr: "Saldırmak / Hücum Etmek" }, { en: "Escape", tr: "Kaçmak / Firar Etmek" }, { en: "Understand", tr: "Anlamak / Kavramak" },
-            { en: "Believe", tr: "İnanmak / Güvenmek" }, { en: "Dream", tr: "Rüya / Hayal" }, { en: "Sleep", tr: "Uyumak / Uyku" },
-            { en: "Laugh", tr: "Gülmek / Kahkaha Atmak" }, { en: "Cry", tr: "Ağlamak / Bağırmak" }, { en: "Wall", tr: "Duvar / Engel" },
-            { en: "Floor", tr: "Zemin / Kat" }, { en: "Stone", tr: "Taş / Kaya" }, { en: "Power", tr: "Güç / İktidar" },
-            { en: "Fight", tr: "Dövüş / Kavga" }, { en: "Hero", tr: "Kahraman / Yiğit" }, { en: "Town", tr: "Kasaba / İlçe" },
-            { en: "Village", tr: "Köy / Kırsal" }, { en: "Voice", tr: "Ses / Seda" }, { en: "Shadow", tr: "Gölge / Karanlık" },
-            { en: "Truth", tr: "Hakikat / Gerçek" }, { en: "Lie", tr: "Yalan / Uzanmak" }, { en: "Mind", tr: "Zihin / Akıl" },
-            { en: "Body", tr: "Vücut / Beden" }, { en: "Heart", tr: "Kalp / Yürek" }, { en: "Soul", tr: "Ruh / Can" },
-            { en: "Defense", tr: "Savunma / Defans" }, { en: "Danger", tr: "Tehlike / Risk" }, { en: "Safe", tr: "Güvenli / Kasa" },
-            { en: "Hunt", tr: "Av / Avlanmak" }, { en: "Hide", tr: "Saklanmak / Gizlenmek" }, { en: "Rest", tr: "Dinlenmek / Kalan Kısım" },
-            { en: "Walk", tr: "Yürümek / Gezinmek" }, { en: "Run", tr: "Koşmak / Yönetmek" }
+            { en: "Our journey takes an hour on horseback.", tr: "Yolculuğumuz at sırtında bir saat sürer." },
+            { en: "Sylphie is afraid of high places.", tr: "Sylphie yüksek yerlerden korkar." },
+            { en: "We cannot allow demons inside the fortress.", tr: "İblislerin kaleye girmesine izin veremeyiz." },
+            { en: "Nanahoshi coughed and fell to the floor.", tr: "Nanahoshi öksürdü ve yere düştü." },
+            { en: "We need to find a cure for her illness.", tr: "Onun hastalığı için bir çare bulmamız gerekiyor." },
+            { en: "The guards wear black armor and helmets.", tr: "Muhafızlar siyah zırh ve miğfer giyer." },
+            { en: "Kishirika was very hungry and ate all the meat.", tr: "Kishirika çok açtı ve tüm eti yedi." },
+            { en: "I started writing a diary in my study.", tr: "Çalışma odamda bir günlük yazmaya başladım." },
+            { en: "Do not go down to the basement tonight.", tr: "Bu gece bodruma inme." },
+            { en: "You must send a letter to Eris.", tr: "Eris'e bir mektup göndermelisin." }
         ],
         "B1": [
-            { en: "Fortress", tr: "Hisar / Kale" }, { en: "Ruins", tr: "Kalıntılar / Harabeler" }, { en: "Teleportation", tr: "Işınlanma / Aktarım" },
-            { en: "Summoning", tr: "Çağırma / Celp" }, { en: "Curse", tr: "Lanet / Beddua" }, { en: "Syndrome", tr: "Sendrom / Belirti Kümesi" },
-            { en: "Poison", tr: "Zehir / Zehirlemek" }, { en: "Discovery", tr: "Keşif / Buluş" }, { en: "Promise", tr: "Söz Vermek / Vaat" },
-            { en: "Anxiety", tr: "Endişe / Kaygı" }, { en: "Exhausted", tr: "Tükenmiş / Bitkin" }, { en: "Silence", tr: "Sessizlik / Sükunet" },
-            { en: "Horizon", tr: "Ufuk / Görüş Açısı" }, { en: "Dungeon", tr: "Zindan / Mahzen" }, { en: "Hesitate", tr: "Tereddüt Etmek / Duraksamak" },
-            { en: "Apologize", tr: "Özür Dilemek / Af Dilemek" }, { en: "Permission", tr: "İzin / Müsaade" }, { en: "Investigate", tr: "Soruşturmak / İncelemek" },
-            { en: "Appreciate", tr: "Takdir Etmek / Müteşekkir Olmak" }, { en: "Destination", tr: "Varış Noktası / Hedef" }, { en: "Corridor", tr: "Koridor / Geçit" },
-            { en: "Unconscious", tr: "Bilinçsiz / Baygın" }, { en: "Nightmare", tr: "Kabus / Kötü Rüya" }, { en: "Knowledge", tr: "Bilgi / İrfan" },
-            { en: "Strength", tr: "Güç / Kuvvet" }, { en: "Memory", tr: "Hafıza / Anı" }, { en: "Destiny", tr: "Kader (İlahi) / Yazgı" },
-            { en: "Fate", tr: "Alınyazısı / Akıbet" }, { en: "Mistake", tr: "Hata / Yanılgı" }, { en: "Forgive", tr: "Affetmek / Bağışlamak" },
-            { en: "Ability", tr: "Yetenek / Kabiliyet" }, { en: "Skill", tr: "Beceri / Hüner" }, { en: "Talent", tr: "Doğuştan Yetenek / İstidat" },
-            { en: "Courage", tr: "Cesaret / Yüreklilik" }, { en: "Brave", tr: "Cesur / Yiğit" }, { en: "Coward", tr: "Korkak / Ödlek" },
-            { en: "Adventure", tr: "Macera / Serüven" }, { en: "Equipment", tr: "Ekipman / Teçhizat" }, { en: "Armor", tr: "Zırh / Koruma" },
-            { en: "Shield", tr: "Kalkan / Siper" }, { en: "Battle", tr: "Savaş / Muharebe" }, { en: "Defeat", tr: "Mağlubiyet / Yenmek" },
-            { en: "Victory", tr: "Zafer / Galibiyet" }, { en: "Honor", tr: "Onur / Şeref" }, { en: "Pride", tr: "Gurur / Kibir" },
-            { en: "Reward", tr: "Ödül / Mükafat" }, { en: "Punishment", tr: "Ceza / Eziyet" }, { en: "Guilt", tr: "Suçluluk / Kabahat" },
-            { en: "Innocent", tr: "Masum / Suçsuz" }, { en: "Survive", tr: "Hayatta Kalmak / Kurtulmak" }
+            { en: "Perugius used teleportation magic to bring us to his castle.", tr: "Perugius bizi kalesine getirmek için ışınlanma büyüsü kullandı." },
+            { en: "Elinalise lost all her memories two hundred years ago.", tr: "Elinalise iki yüz yıl önce tüm anılarını kaybetti." },
+            { en: "If you do not have mana, you cannot use magic.", tr: "Eğer manan yoksa büyü kullanamazsın." },
+            { en: "Cliff promised to help Nanahoshi return to her home.", tr: "Cliff, Nanahoshi'nin evine dönmesine yardım etmeye söz verdi." },
+            { en: "We used a hidden tunnel to escape from the city.", tr: "Şehirden kaçmak için gizli bir tünel kullandık." },
+            { en: "Zanoba held the demon king so that Cliff could run away.", tr: "Zanoba, Cliff kaçabilsin diye iblis kralı tuttu." },
+            { en: "Drinking this special grass tea will keep her alive.", tr: "Bu özel ot çayını içmek onu hayatta tutacak." },
+            { en: "I felt a strange presence behind the closed door.", tr: "Kapalı kapının arkasında tuhaf bir varlık hissettim." },
+            { en: "The old man claimed that he came from the future.", tr: "Yaşlı adam gelecekten geldiğini iddia etti." },
+            { en: "A sick rat in the basement will cause a terrible tragedy.", tr: "Bodrumdaki hasta bir fare korkunç bir trajediye sebep olacak." }
         ],
-                "B2": [
-            { en: "Consciousness", tr: "Bilinç / Şuur" }, { en: "Despair", tr: "Umutsuzluk / Çaresizlik" }, { en: "Warning", tr: "Uyarı / İkaz" },
-            { en: "Suspicious", tr: "Şüpheli / Kuşkulu" }, { en: "Strategy", tr: "Strateji / Plan" }, { en: "Opportunity", tr: "Fırsat / Şans" },
-            { en: "Prejudice", tr: "Önyargı / Peşin Hüküm" }, { en: "Responsibility", tr: "Sorumluluk / Mesuliyet" }, { en: "Architecture", tr: "Mimari / Yapı Sanatı" },
-            { en: "Immortal", tr: "Ölümsüz / Baki" }, { en: "Paralyzed", tr: "Felç Olmuş / Kilitlenmiş" }, { en: "Resistance", tr: "Direnç / Karşı Koyma" },
-            { en: "Intimidating", tr: "Korkutucu / Göz Dağı Veren" }, { en: "Atmosphere", tr: "Atmosfer / Ortam" }, { en: "Vengeance", tr: "İntikam / Öç" },
-            { en: "Compassion", tr: "Şefkat / Merhamet" }, { en: "Relentless", tr: "Acımasız / Durmak Bilmez" }, { en: "Overwhelming", tr: "Ezici / Karşı Konulamaz" },
-            { en: "Intervene", tr: "Müdahale Etmek / Araya Girmek" }, { en: "Provoke", tr: "Kışkırtmak / Tahrik Etmek" }, { en: "Justification", tr: "Gerekçe / Haklı Çıkarma" },
-            { en: "Solitude", tr: "Yalnızlık / İnziva" }, { en: "Manipulate", tr: "Manipüle Etmek / Yönlendirmek" }, { en: "Deflect", tr: "Saptırmak / Yönünü Değiştirmek" },
-            { en: "Authority", tr: "Otorite / Yetki" }, { en: "Conflicted", tr: "Çelişkili / İkilemde Kalmış" }, { en: "Encounter", tr: "Karşılaşma / Rastlaşma" },
-            { en: "Grudge", tr: "Kin / Garez" }, { en: "Persuasive", tr: "İkna Edici / İnandırıcı" }, { en: "Unfounded", tr: "Asılsız / Temelsiz" },
-            { en: "Subordinate", tr: "Ast / Alt Rütbeli" }, { en: "Colleague", tr: "Meslektaş / İş Arkadaşı" }, { en: "Opponent", tr: "Rakip / Karşıt" },
-            { en: "Rival", tr: "Rakip / Rekabet Eden" }, { en: "Ally", tr: "Müttefik / Dost" }, { en: "Betrayal", tr: "İhanet / Hainlik" },
-            { en: "Loyalty", tr: "Sadakat / Bağlılık" }, { en: "Deceive", tr: "Kandırmak / Aldatmak" }, { en: "Perceive", tr: "Algılamak / Sezmek" },
-            { en: "Anticipate", tr: "Beklemek / Önceden Sezmek" }, { en: "Eliminate", tr: "Yok Etmek / Elemek" }, { en: "Establish", tr: "Kurmak / Tesis Etmek" },
-            { en: "Maintain", tr: "Sürdürmek / Korumak" }, { en: "Negotiate", tr: "Müzakere Etmek / Görüşmek" }, { en: "Compromise", tr: "Uzlaşmak / Taviz Vermek" },
-            { en: "Threaten", tr: "Tehdit Etmek / Gözdağı Vermek" }, { en: "Surrender", tr: "Teslim Olmak / Pes Etmek" }, { en: "Dominate", tr: "Hükmetmek / Baskın Olmak" },
-            { en: "Subdue", tr: "Boyun Eğdirmek / Bastırmak" }, { en: "Evade", tr: "Kaçınmak / Atlatmak" }
+        "B2": [
+            { en: "Ariel wanted to gain Perugius's support to seize the throne.", tr: "Ariel tahtı ele geçirmek için Perugius'un desteğini kazanmak istedi." },
+            { en: "In Fiend Summoning, you cannot control a creature stronger than yourself.", tr: "Yaratık Çağırmada kendinizden daha güçlü bir yaratığı kontrol edemezsiniz." },
+            { en: "Dryne Syndrome occurs when foreign mana accumulates inside the body.", tr: "Dryne Sendromu, yabancı mana vücudun içinde biriktiğinde ortaya çıkar." },
+            { en: "Despite the danger, we decided to travel to the Demon Continent.", tr: "Tehlikeye rağmen İblis Kıtası'na seyahat etmeye karar verdik." },
+            { en: "Atofe severed her own arm without a moment of hesitation.", tr: "Atofe bir an bile tereddüt etmeden kendi kolunu kesti." },
+            { en: "Every spell I cast was immediately countered by the veteran knight.", tr: "Yaptığım her büyü kıdemli şövalye tarafından anında karşılandı." },
+            { en: "I unleashed an electric shock that paralyzed everyone on the wet ground.", tr: "Islak zemindeki herkesi felç eden bir elektrik şoku saldım." },
+            { en: "The Man God only pretends to help you to gain your trust.", tr: "İnsan Tanrı sadece güvenini kazanmak için sana yardım ediyormuş gibi yapar." },
+            { en: "Grief and despair drove my future self to seek vengeance.", tr: "Keder ve umutsuzluk gelecekteki halimi intikam aramaya itti." },
+            { en: "He handed me a worn diary containing all his past regrets.", tr: "Bana tüm geçmiş pişmanlıklarını içeren yıpranmış bir günlük uzattı." }
         ],
         "C1": [
-            { en: "Artifact", tr: "Büyülü Eşya / Yapay Nesne" }, { en: "Incantation", tr: "Büyü Sözü / Tılsım" }, { en: "Pathogen", tr: "Patojen / Mikrop" },
-            { en: "Immunity", tr: "Bağışıklık / Muafiyet" }, { en: "Aura", tr: "Aura / Hale" }, { en: "Disturb", tr: "Bozmak / Rahatsız Etmek" },
-            { en: "Clairvoyance", tr: "Öngörü / Durugörü" }, { en: "Resemblance", tr: "Benzerlik / Andırma" }, { en: "Coincidental", tr: "Tesadüfi / Rastlantısal" },
-            { en: "Imposing", tr: "Heybetli / Etkileyici" }, { en: "Extravagant", tr: "Gösterişli / Lüks" }, { en: "Maniacal", tr: "Maniakal / Çılgınca" },
-            { en: "Acquaintance", tr: "Tanıdık / Aşinalık" }, { en: "Contorted", tr: "Çarpılmış / Yüzü Buruşmuş" }, { en: "Baffled", tr: "Şaşkına Dönmüş / Afallamış" },
-            { en: "Empathize", tr: "Empati Kurmak / Halden Anlamak" }, { en: "Promiscuity", tr: "Rastgele İlişki / Çapkınlık" }, { en: "Mumble", tr: "Mırıldanmak / Gevelemek" },
-            { en: "Plunder", tr: "Yağmalamak / Talan Etmek" }, { en: "Labyrinth", tr: "Labirent / Dehliz" }, { en: "Hallucination", tr: "Halüsinasyon / Sanrı" },
-            { en: "Intricate", tr: "Karmaşık / İnce Detaylı" }, { en: "Extinguish", tr: "Söndürmek / Yok Etmek" }, { en: "Unfathomable", tr: "Akıl Almaz / Derinliği Ölçülemez" },
-            { en: "Labyrinthine", tr: "Labirent Gibi / Karışık" }, { en: "Dilapidated", tr: "Harap / Yıkık Dökük" }, { en: "Premonition", tr: "Önsezi / İçine Doğma" },
-            { en: "Sullenly", tr: "Somurtarak / Asık Suratla" }, { en: "Formality", tr: "Resmiyet / Prosedür" }, { en: "Decoct", tr: "Kaynatarak Özünü Çıkarmak / Demlemek" },
-            { en: "Prowess", tr: "Hüner / Savaşçılık Yeteneği" }, { en: "Endure", tr: "Katlanmak / Dayanmak" }, { en: "Unprecedented", tr: "Eşi Görülmemiş / Benzersiz" },
-            { en: "Inevitable", tr: "Kaçınılmaz / Mukadder" }, { en: "Catastrophe", tr: "Felaket / Yıkım" }, { en: "Calamity", tr: "Büyük Felaket / Afet" },
-            { en: "Atrocity", tr: "Vahşet / Zulüm" }, { en: "Sovereignty", tr: "Egemenlik / Hükümranlık" }, { en: "Vassal", tr: "Hizmetkar / Derebeylik Tebaası" },
-            { en: "Tyrant", tr: "Tiran / Zalim Hükümdar" }, { en: "Edict", tr: "Ferman / Emirname" }, { en: "Sanctuary", tr: "Tapınak / Sığınak" },
-            { en: "Asylum", tr: "Sığınma / İltica" }, { en: "Penance", tr: "Kefaret / Tövbe" }, { en: "Atonement", tr: "Telafi / Günah Çıkarma" },
-            { en: "Reincarnation", tr: "Reenkarnasyon / Yeniden Doğuş" }, { en: "Genesis", tr: "Oluşum / Yaratılış" }, { en: "Oblivion", tr: "Unutuluş / Hiçlik" },
-            { en: "Remnant", tr: "Kalıntı / Bakiye" }, { en: "Vestige", tr: "İz / Belirti" }
+            { en: "The ancient fortress was little more than an echo of history.", tr: "Kadim kale, tarihin bir yankısından biraz daha fazlasıydı." },
+            { en: "Perugius exuded an intimidating aura that made my legs tremble.", tr: "Perugius bacaklarımı titreten korkutucu bir aura yayıyordu." },
+            { en: "For those in pain, nothing is more contemptible than empty reassurance.", tr: "Acı çekenler için hiçbir şey boş teselliden daha aşağılık değildir." },
+            { en: "Having the ability to do something does not mean one is obligated to do it.", tr: "Bir şeyi yapma yeteneğine sahip olmak, kişinin onu yapmak zorunda olduğu anlamına gelmez." },
+            { en: "She was forcibly conscripted into the demon king's personal guard.", tr: "İblis kralın kişisel muhafız birliğine zorla askere alındı." },
+            { en: "Atofe deflected the projectile with a subtle flick of her blade.", tr: "Atofe kılıcının ince bir hareketiyle mermiyi saptırdı." },
+            { en: "Perugius summoned two ornate gates to drain the surrounding mana.", tr: "Perugius çevredeki manayı çekmek için iki süslü kapı çağırdı." },
+            { en: "The pathogen takes refuge inside an unborn child and turns the mother to stone.", tr: "Patojen doğmamış bir çocuğun içine sığınır ve anneyi taşa çevirir." },
+            { en: "Do not antagonize the Man God, for he is an enemy beyond your reach.", tr: "İnsan Tanrı'yı karşınıza almayın, çünkü o ulaşamayacağınız bir düşmandır." },
+            { en: "His incomplete time travel magic left his body fatally mutilated.", tr: "Tamamlanmamış zaman yolculuğu büyüsü, vücudunu ölümcül şekilde parçalanmış bıraktı." }
         ],
         "C2": [
-            { en: "Indescribable", tr: "Tarif Edilemez / Tanımsız" }, { en: "Oozing", tr: "Sızdıran / Yayan" }, { en: "Uncanny", tr: "Ürkütücü Derecede Tuhaf / Esrarengiz" },
-            { en: "Behemoth", tr: "Devasa Yaratık / İri Kıyım" }, { en: "Opaque", tr: "Mat / Işık Geçirmeyen" }, { en: "Protruding", tr: "Dışarı Çıkık / Fırlamış" },
-            { en: "Crotchety", tr: "Huysuz / Çabuk Öfkelenen" }, { en: "Deferential", tr: "Hürmetkar / Saygılı" }, { en: "Tantamount", tr: "Eşdeğer / Aynı Kapıya Çıkan" },
-            { en: "Flippant", tr: "Laubali / Ciddiyetsiz" }, { en: "Lackadaisical", tr: "Uyuşuk / Başından Savan" }, { en: "Furtively", tr: "Gizlice / Çaktırmadan" },
-            { en: "Emaciated", tr: "Bir Deri Bir Kemik / Aşırı Zayıflamış" }, { en: "Suffocating", tr: "Boğucu / Nefes Aldırmayan" }, { en: "Ashen", tr: "Kül Rengi / Solgun" },
-            { en: "Purgatory", tr: "Araf / Azap Yeri" }, { en: "Insatiable", tr: "Doymak Bilmez / Tatmin Edilemez" }, { en: "Imbecile", tr: "Ahmak / Gerizekalı" },
-            { en: "Audacious", tr: "Gözüpek / Cüretkar" }, { en: "Indispensable", tr: "Vazgeçilmez / Zaruri" }, { en: "Paraphernalia", tr: "Teçhizat / Ivır Zıvır" },
-            { en: "Phantasm", tr: "Hayalet / Görüntü" }, { en: "Incessant", tr: "Aralıksız / Durmak Bilmeyen" }, { en: "Pulverize", tr: "Paramparça Etmek / Toza Çevirmek" },
-            { en: "Prostrating", tr: "Yere Kapanma / Secde Etme" }, { en: "Dumbstruck", tr: "Dili Tutulmuş / Apışıp Kalmış" }, { en: "Uncowed", tr: "Yılmamış / Korkutulmamış" },
-            { en: "Voluptuous", tr: "Şehvet Uyandıran / Kıvrımlı" }, { en: "Resigned", tr: "Boyun Eğmiş / Kabullenmiş" }, { en: "Disheveled", tr: "Dağınık / Pejmürde" },
-            { en: "Unmitigated", tr: "Hafifletilemez / Mutlak" }, { en: "Inexorable", tr: "Durdurulamaz / Amansız" }, { en: "Ephemeral", tr: "Geçici / Kısa Ömürlü" },
-            { en: "Quintessential", tr: "Tipik / Özüne Dair" }, { en: "Obfuscate", tr: "Kafasını Karıştırmak / Anlaşılmaz Kılmak" }, { en: "Prevaricate", tr: "Lafı Dolandırmak / Kaçamak Konuşmak" },
-            { en: "Sycophant", tr: "Dalkavuk / Yalak" }, { en: "Truculent", tr: "Saldırgan / Yırtıcı" }, { en: "Pernicious", tr: "Zararlı / Yıkıcı" },
-            { en: "Insidious", tr: "Sinsi / Gizliden Yayılan" }, { en: "Omnipotent", tr: "Her Şeye Gücü Yeten / Mutlak Güçlü" }, { en: "Omniscient", tr: "Her Şeyi Bilen / Alim" },
-            { en: "Ubiquitous", tr: "Her Yerde Bulunan / Yaygın" }, { en: "Enigmatic", tr: "Gizemli / Muammalı" }, { en: "Esoteric", tr: "Sadece Bilenlerin Anladığı / Gizli" },
-            { en: "Paradigm", tr: "Paradigma / Model" }, { en: "Dichotomy", tr: "İkilem / İkiye Bölünme" }, { en: "Zenith", tr: "Zirve / Doruk" },
-            { en: "Nadir", tr: "En Alt Nokta / Çöküş" }, { en: "Epiphany", tr: "Aydınlanma / İlham Gelmesi" }
+            { en: "Debris was scattered across the ground, vestiges of some stone flooring.", tr: "Enkaz zemine saçılmıştı, taş döşemeden geriye kalan izlerdi." },
+            { en: "Ariel Anemoi Asura was a peerless beauty who oozed charisma.", tr: "Ariel Anemoi Asura, karizma saçan eşsiz bir güzellikti." },
+            { en: "He found the suffocating formality of the royal court utterly intolerable.", tr: "Kraliyet sarayının boğucu resmiyetini tamamen çekilmez buldu." },
+            { en: "What you are suggesting is tantamount to abandoning our friend to die.", tr: "Önerdiğin şey arkadaşımızı ölüme terk etmekle eşdeğerdir." },
+            { en: "Demon kings are notoriously flippant and lackadaisical regarding minor details.", tr: "İblis krallar küçük detaylar konusunda bilinen bir şekilde laubali ve umursamazdır." },
+            { en: "She severed her own limb with casual indifference, as if snipping a loose thread.", tr: "Kendi uzvunu, gevşek bir ipliği kesiyormuşçasına sıradan bir kayıtsızlıkla kopardı." },
+            { en: "A stifling aura of bloodlust wafted off the savage monarch.", tr: "Vahşi hükümdardan boğucu bir kan susuzluğu aurası yayılıyordu." },
+            { en: "Sylphie looked horribly emaciated after exhausting her stamina in the sickbay.", tr: "Sylphie revirde enerjisini tükettikten sonra korkunç derecede bir deri bir kemik görünüyordu." },
+            { en: "Asura's craftsmen merely create gaudy works to satisfy the vanity of the nobility.", tr: "Asura'nın zanaatkarları sadece soyluların kibrini tatmin etmek için şatafatlı eserler yaratır." },
+            { en: "I stood dumbstruck as the charred corpse of my future self turned to ash.", tr: "Gelecekteki halimin kömürleşmiş cesedi küle dönerken dilim tutulmuş halde durdum." }
         ],
         "Kalıplar": [
-            { en: "Even if...", tr: "Se Bile / ...sa Bile" },
-            { en: "As if / As though", tr: "Sanki / ...çıkcasına" },
-            { en: "So that...", tr: "-sın Diye / -mesi İçin" },
-            { en: "By the way", tr: "Bu Arada / Laf Aramızda" },
-            { en: "In the meantime", tr: "Bu Esnada / Bu Sırada" },
-            { en: "At first glance", tr: "İlk Bakışta / Görünüşte" },
-            { en: "To make matters worse", tr: "Dahası / İşin Kötüsü" },
-            { en: "No matter how...", tr: "Ne Kadar ...sa ...sın / Her Ne Kadar" },
-            { en: "Rather than...", tr: "-den Ziyade / -mek Yerine" },
-            { en: "As long as...", tr: "-diği Sürece / -madığı Sürece" },
-            { en: "In other words", tr: "Başka Bir Deyişle / Kısacası" },
-            { en: "On the other hand", tr: "Öte Yandan / Diğer Taraftan" },
-            { en: "Without a doubt", tr: "Şüphesiz / Kuşkusuz" },
-            { en: "For the sake of", tr: "Uğruna / Hatırına" },
-            { en: "In the blink of an eye", tr: "Göz Açıp Kapayıncaya Kadar / Anında" },
-            { en: "All of a sudden", tr: "Aniden / Birdenbire" },
-            { en: "Out of nowhere", tr: "Hiçyoktan / Beklenmedik Anda" },
-            { en: "Back and forth", tr: "İleri Geri / Gidip Gelerek" },
-            { en: "Up until now", tr: "Şimdiye Kadar / Bugüne Dek" },
-            { en: "To be honest", tr: "Dürüst Olmak Gerekirse / Doğrusu" },
-            { en: "At the cost of", tr: "Pahasına / Bedeliyle" },
-            { en: "In the wake of", tr: "Ardından / Sonrasında" },
-            { en: "On the verge of", tr: "Eşiğinde / Üzere" },
-            { en: "Prior to", tr: "Öncesinde / -den Önce" },
-            { en: "In spite of", tr: "Rağmen / Karşın" },
-            { en: "Regardless of", tr: "Bakılmaksızın / Ne Olursa Olsun" },
-            { en: "With regard to", tr: "İlişkin / Dair" },
-            { en: "In terms of", tr: "Açısından / Bakımından" },
-            { en: "Come to mind", tr: "Akla Gelmek / Çağrıştırmak" },
-            { en: "Make a name for oneself", tr: "Ün Salmak / Adını Duyurmak" }
+            { en: "He appeared before us in the blink of an eye.", tr: "Göz açıp kapayıncaya kadar önümüzde belirdi." },
+            { en: "Even if you resist, you cannot defeat an immortal demon king.", tr: "Dirensen bile ölümsüz bir iblis kralı yenemezsin." },
+            { en: "She stared at me as if she had seen a ghost.", tr: "Bana sanki bir hayalet görmüş gibi baktı." },
+            { en: "In the meantime, I gathered everyone to explain the situation.", tr: "Bu esnada durumu açıklamak için herkesi topladım." },
+            { en: "To make matters worse, our only escape route was sealed off.", tr: "İşin kötüsü, tek kaçış rotamız kapatılmıştı." },
+            { en: "As long as you drink this tea daily, the mana will not build up.", tr: "Bu çayı her gün içtiğin sürece mana birikmeyecek." },
+            { en: "In the wake of the war, the king united the ravaged country.", tr: "Savaşın ardından kral harap olmuş ülkeyi birleştirdi." },
+            { en: "No matter how strong you become, you cannot protect everyone alone.", tr: "Ne kadar güçlü olursan ol, tek başına herkesi koruyamazsın." },
+            { en: "Out of nowhere, a man wearing a fox mask attacked me.", tr: "Hiç yoktan, tilki maskesi takan bir adam bana saldırdı." },
+            { en: "Rather than fighting her directly, we decided to retreat.", tr: "Onunla doğrudan savaşmaktansa geri çekilmeye karar verdik." }
         ]
     };
 
+    // KELİME SÖZLÜĞÜ (Cümlelerdeki herhangi bir kelimeye tıklandığında çıkacak anlamlar)
+    const wordDict = {
+        "rudeus": "Rudeus (Ana karakter)", "has": "Sahiptir / Var", "a": "Bir", "big": "Büyük", "family": "Aile",
+        "the": "Belirtme eki", "castle": "Kale / Şato", "is": "-dir / -dır", "in": "İçinde / -de", "sky": "Gökyüzü",
+        "roxy": "Roxy", "stays": "Kalır / Kalıyor", "at": "-de / -da", "home": "Ev", "today": "Bugün",
+        "perugius": "Perugius (Zırhlı Ejderha Kral)", "perugius's": "Perugius'un", "strong": "Güçlü", "king": "Kral",
+        "nanahoshi": "Nanahoshi", "drinks": "İçer / İçiyor", "hot": "Sıcak", "tea": "Çay", "bed": "Yatak",
+        "white": "Beyaz", "room": "Oda", "very": "Çok", "cold": "Soğuk",
+        "zanoba": "Zanoba", "loves": "Sever", "old": "Eski / Yaşlı", "dolls": "Bebekler", "and": "Ve", "statues": "Heykeller",
+        "cliff": "Cliff", "elinalise": "Elinalise", "walk": "Yürümek / Yürür", "together": "Birlikte",
+        "aisha": "Aisha", "kitchen": "Mutfak", "now": "Şimdi / Şu an", "man": "Adam", "hair": "Saç",
+        "our": "Bizim", "journey": "Yolculuk", "takes": "Alır / Sürer", "an": "Bir", "hour": "Saat", "on": "Üzerinde / -de", "horseback": "At sırtı",
+        "sylphie": "Sylphie", "afraid": "Korkmuş / Korkan", "of": "-ın / -in", "high": "Yüksek", "places": "Yerler",
+        "we": "Biz", "cannot": "Yapamayız / -emeyiz", "allow": "İzin vermek", "demons": "İblisler", "inside": "İçeride / İçine", "fortress": "Hisar / Kale",
+        "coughed": "Öksürdü", "fell": "Düştü", "to": "-e / -a / -mek için", "floor": "Zemin / Yer",
+        "need": "İhtiyaç duymak / Gerekmek", "find": "Bulmak", "cure": "Çare / Tedavi", "for": "İçin / Çünkü", "her": "Onun / Ona", "illness": "Hastalık",
+        "guards": "Muhafızlar", "wear": "Giymek / Takmak", "black": "Siyah", "armor": "Zırh", "helmets": "Miğferler",
+        "kishirika": "Kishirika (İblis İmparatoru)", "was": "İdi / Oldu", "hungry": "Aç", "ate": "Yedi", "all": "Tüm / Hepsi", "meat": "Et",
+        "i": "Ben", "started": "Başladım", "writing": "Yazmak / Yazmaya", "diary": "Günlük", "my": "Benim", "study": "Çalışma odası",
+        "do": "Yapmak (Yardımcı fiil)", "not": "Değil / Olumsuzluk eki", "go": "Gitmek", "down": "Aşağı", "basement": "Bodrum", "tonight": "Bu gece",
+        "you": "Sen / Siz", "must": "Zorunda olmak / -meli", "send": "Göndermek", "letter": "Mektup", "eris": "Eris",
+        "used": "Kullandı", "teleportation": "Işınlanma", "magic": "Büyü / Sihir", "bring": "Getirmek", "us": "Bizi / Bize", "his": "Onun",
+        "lost": "Kaybetti", "memories": "Anılar / Hafıza", "two": "İki", "hundred": "Yüz", "years": "Yıllar", "ago": "Önce",
+        "if": "Eğer / -se", "have": "Sahip olmak", "mana": "Mana (Büyü gücü)", "use": "Kullanmak",
+        "promised": "Söz verdi", "help": "Yardım etmek", "return": "Dönmek",
+        "hidden": "Gizli / Saklı", "tunnel": "Tünel", "escape": "Kaçmak", "from": "-den / -dan", "city": "Şehir",
+        "held": "Tuttu", "demon": "İblis", "so": "Böylece / Diye (so that)", "that": "Ki / O", "could": "Yapabilsin / -ebilirdi", "run": "Koşmak / Kaçmak (run away)", "away": "Uzağa",
+        "drinking": "İçmek", "this": "Bu", "special": "Özel", "grass": "Ot / Çimen", "will": "Gelecek zaman eki (-ecek)", "keep": "Tutmak / Korumak", "alive": "Hayatta / Canlı",
+        "felt": "Hissettim", "strange": "Tuhaf / Garip", "presence": "Varlık", "behind": "Arkasında", "closed": "Kapalı", "door": "Kapı",
+        "claimed": "İddia etti", "he": "O (Erkek)", "came": "Geldi", "future": "Gelecek",
+        "sick": "Hasta", "rat": "Fare / Sıçan", "cause": "Sebep olmak", "terrible": "Korkunç", "tragedy": "Trajedi / Felaket",
+        "ariel": "Prenses Ariel", "wanted": "İstedi", "gain": "Kazanmak / Elde etmek", "support": "Destek", "seize": "Ele geçirmek", "throne": "Taht",
+        "fiend": "Yaratık / Canavar", "summoning": "Çağırma", "control": "Kontrol etmek", "creature": "Yaratık", "stronger": "Daha güçlü", "than": "-den / -dan", "yourself": "Kendin",
+        "dryne": "Dryne (Hastalık adı)", "syndrome": "Sendrom", "occurs": "Meydana gelir / Oluşur", "when": "Zaman / -dığında", "foreign": "Yabancı", "accumulates": "Birikir", "body": "Vücut / Beden",
+        "despite": "Rağmen", "danger": "Tehlike", "decided": "Karar verdi", "travel": "Seyahat etmek", "continent": "Kıta",
+        "atofe": "Atofe (Ölümsüz İblis Kral)", "severed": "Kesti / Kopardı", "own": "Kendi", "arm": "Kol", "without": "Olmadan / -meksizin", "moment": "An", "hesitation": "Tereddüt",
+        "every": "Her", "spell": "Büyü", "cast": "Yaptığım / Attığım (büyü)", "immediately": "Anında / Hemen", "countered": "Karşılandı / Engellendi", "by": "Tarafından / İle", "veteran": "Kıdemli / Tecrübeli", "knight": "Şövalye",
+        "unleashed": "Saldım / Serbest bıraktım", "electric": "Elektrik", "shock": "Şok", "paralyzed": "Felç etti", "everyone": "Herkes", "wet": "Islak", "ground": "Zemin / Toprak",
+        "god": "Tanrı", "only": "Sadece / Yalnızca", "pretends": "-mış gibi yapar", "your": "Senin / Sizin", "trust": "Güven",
+        "grief": "Keder / Acı", "despair": "Umutsuzluk / Çaresizlik", "drove": "İtti / Sürükledi", "self": "Öz / Kendi hali", "seek": "Aramak", "vengeance": "İntikam",
+        "handed": "Uzattı / Verdi", "me": "Bana / Beni", "worn": "Yıpranmış / Eskimiş", "containing": "İçeren", "past": "Geçmiş", "regrets": "Pişmanlıklar",
+        "ancient": "Kadim / Çok eski", "little": "Biraz / Küçük", "more": "Daha fazla", "echo": "Yankı", "history": "Tarih",
+        "exuded": "Yaydı / Saçtı", "intimidating": "Korkutucu / Gözdağı veren", "aura": "Aura / Hava", "made": "Yaptı / Ettirdi", "legs": "Bacaklar", "tremble": "Titremek",
+        "those": "Onlar / Şunlar", "pain": "Acı / Istırap", "nothing": "Hiçbir şey", "contemptible": "Aşağılık / Küçümsenecek", "empty": "Boş", "reassurance": "Teselli / Güvence",
+        "having": "Sahip olmak", "ability": "Yetenek / Kabiliyet", "something": "Bir şey", "does": "Yapar (Yardımcı fiil)", "mean": "Anlamına gelmek", "one": "Kişi / Biri", "obligated": "Zorunlu / Mecbur", "it": "Onu / O",
+        "she": "O (Kadın)", "forcibly": "Zorla", "conscripted": "Askere alındı / Zorla dahil edildi", "into": "İçine", "king's": "Kralın", "personal": "Kişisel / Özel", "guard": "Muhafız birliği",
+        "deflected": "Saptırdı / Yönünü değiştirdi", "projectile": "Fırlatılan cisim / Mermi", "with": "İle", "subtle": "İnce / Belirsiz", "flick": "Hafif darbe / Fiske", "blade": "Kılıç / Bıçak",
+        "summoned": "Çağırdı", "ornate": "Süslü / Gösterişli", "gates": "Kapılar", "drain": "Çekmek / Boşaltmak", "surrounding": "Çevredeki",
+        "pathogen": "Patojen / Hastalık etkeni", "refuge": "Sığınak (take refuge: sığınmak)", "unborn": "Doğmamış", "child": "Çocuk", "turns": "Çevirir / Dönüştürür", "mother": "Anne", "stone": "Taş",
+        "antagonize": "Düşman edinmek / Karşısına almak", "enemy": "Düşman", "beyond": "Ötesinde", "reach": "Erişim / Ulaşım",
+        "incomplete": "Tamamlanmamış / Eksik", "time": "Zaman", "left": "Bıraktı", "fatally": "Ölümcül şekilde", "mutilated": "Parçalanmış / Sakatlanmış",
+        "debris": "Enkaz / Moloz", "scattered": "Saçılmış / Dağılmış", "across": "Boyunca / Üzerine", "vestiges": "İzler / Kalıntılar", "some": "Bazı / Bir miktar", "flooring": "Döşeme / Zemin",
+        "anemoi": "Anemoi", "asura": "Asura", "asura's": "Asura'nın", "peerless": "Eşsiz / Benzersiz", "beauty": "Güzellik", "who": "Ki o", "oozed": "Sızdırdı / Saçtı", "charisma": "Karizma",
+        "found": "Buldu", "suffocating": "Boğucu", "formality": "Resmiyet", "royal": "Kraliyet", "court": "Saray / Mahkeme", "utterly": "Tamamen / Bütünüyle", "intolerable": "Çekilmez / Tahammül edilemez",
+        "what": "Ne / Şey", "are": "Yardımcı fiil (-dir)", "suggesting": "Öneriyorsun", "tantamount": "Eşdeğer / Aynı kapıya çıkan", "abandoning": "Terk etmek", "friend": "Arkadaş", "die": "Ölmek",
+        "kings": "Krallar", "notoriously": "Adı çıkmış şekilde / Bilinen şekilde", "flippant": "Laubali / Ciddiyetsiz", "lackadaisical": "Uyuşuk / Umursamaz", "regarding": "Konusunda / İlişkin", "minor": "Küçük / Önemsiz", "details": "Detaylar",
+        "limb": "Uzuv (Kol/Bacak)", "casual": "Sıradan / Günlük", "indifference": "Kayıtsızlık / Umursamazlık", "as": "Gibi / Olarak (as if: sanki)", "snipping": "Makasla kesmek", "loose": "Gevşek / Sarkık", "thread": "İplik",
+        "stifling": "Boğucu / Bunaltıcı", "bloodlust": "Kan susuzluğu / Öldürme arzusu", "wafted": "Yayıldı / Esti", "off": "-den / Uzaklaşarak", "savage": "Vahşi / Acımasız", "monarch": "Hükümdar / Kral",
+        "looked": "Göründü / Baktı", "horribly": "Korkunç derecede", "emaciated": "Bir deri bir kemik kalmış", "after": "Sonra", "exhausting": "Tüketmek", "stamina": "Dayanıklılık / Enerji", "sickbay": "Revir / Hasta odası",
+        "craftsmen": "Zanaatkarlar", "merely": "Sadece / Yalnızca", "create": "Yaratmak / Üretmek", "gaudy": "Şatafatlı / Gösterişli", "works": "Eserler / İşler", "satisfy": "Tatmin etmek", "vanity": "Kibir / Gösteriş merakı", "nobility": "Soylular / Asilzadeler",
+        "stood": "Durdu", "dumbstruck": "Dili tutulmuş / Şaşkına dönmüş", "charred": "Kömürleşmiş / Yanmış", "corpse": "Ceset", "turned": "Döndü / Dönüştü", "ash": "Kül",
+        "appeared": "Belirdi / Göründü", "before": "Önünde / Önce", "blink": "Göz kırpma (blink of an eye: göz açıp kapayıncaya kadar)", "eye": "Göz",
+        "even": "Bile (even if: -se bile)", "resist": "Direnmek / Karşı koymak", "defeat": "Yenmek / Mağlup etmek", "immortal": "Ölümsüz",
+        "stared": "Dik dik baktı", "had": "Sahip oldu (Geçmiş zaman)", "seen": "Görmüş", "ghost": "Hayalet",
+        "meantime": "Bu esnada (in the meantime)", "gathered": "Topladı", "explain": "Açıklamak", "situation": "Durum",
+        "make": "Yapmak", "matters": "Konular / İşler (to make matters worse: işin kötüsü)", "worse": "Daha kötü", "escape": "Kaçış", "route": "Rota / Yol", "sealed": "Mühürlendi / Kapatıldı",
+        "long": "Uzun (as long as: -dığı sürece)", "drink": "İçmek", "daily": "Günlük / Her gün", "build": "Birikmek (build up)", "up": "Yukarı",
+        "wake": "Ardından (in the wake of)", "war": "Savaş", "united": "Birleştirdi", "ravaged": "Harap olmuş / Yıkılmış", "country": "Ülke",
+        "no": "Hayır / Hiç", "matter": "Önem (no matter how: ne kadar ... olursa olsun)", "how": "Nasıl / Ne kadar", "become": "Olmak / Haline gelmek", "protect": "Korumak", "alone": "Yalnız / Tek başına",
+        "out": "Dışarı", "nowhere": "Hiçbir yer (out of nowhere: hiç yoktan)", "wearing": "Giyen / Takan", "fox": "Tilki", "mask": "Maske", "attacked": "Saldırdı",
+        "rather": "Ziyade / Tercihen (rather than: -maktansa)", "fighting": "Savaşmak", "directly": "Doğrudan", "retreat": "Geri çekilmek"
+    };
+
     let currentLevelKey = "A1";
-    let activeWordList = [];
-    let currentWordObj = {};
-    let currentWordIndex = 0;
-    
-    let currentQuestionType = 1; 
+    let activeList = [];
+    let currentSentenceObj = {};
+    let currentSentenceIndex = 0;
     let correctAnswerIndex = 0;
     
     let score = 0;
@@ -521,14 +583,21 @@
     let isMistakeMode = false;
     let mistakeQueue = [];
     let currentPool = []; 
-    let questionTypePool = [];
 
-    document.getElementById('answer-input').addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            checkInputAnswer();
+    function speakText(text, event) {
+        if (event) event.stopPropagation();
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function speakCurrentSentence(event) {
+        if (currentSentenceObj && currentSentenceObj.en) {
+            speakText(currentSentenceObj.en, event);
         }
-    });
+    }
 
     function showScreen(screenId) {
         document.getElementById('level-screen').classList.add('hidden');
@@ -544,14 +613,14 @@
         
         levels.forEach(lvl => {
             let btn = document.createElement('button');
-            btn.innerText = `Seviye ${lvl} (${wordDatabase[lvl].length} Kelime)`;
+            btn.innerText = `Seviye ${lvl} Cümleleri (${sentenceDatabase[lvl].length})`;
             btn.className = "btn-level";
             btn.onclick = () => startLevel(lvl);
             levelsDiv.appendChild(btn);
         });
 
         let patternBtn = document.createElement('button');
-        patternBtn.innerText = `📖 Metin Kalıpları (${wordDatabase["Kalıplar"].length} Adet)`;
+        patternBtn.innerText = `📖 Cümle İçinde Kalıplar & Bağlaçlar (${sentenceDatabase["Kalıplar"].length})`;
         patternBtn.className = "btn-level btn-patterns";
         patternBtn.onclick = () => startLevel("Kalıplar");
         levelsDiv.appendChild(patternBtn);
@@ -560,7 +629,7 @@
 
     function startLevel(levelKey) {
         currentLevelKey = levelKey;
-        activeWordList = wordDatabase[levelKey];
+        activeList = sentenceDatabase[levelKey];
         
         document.getElementById('level-display').innerText = levelKey;
 
@@ -572,7 +641,6 @@
         mistakeQueue = [];
         
         refillPool(); 
-
         updateScore();
         showScreen('game-screen');
         askQuestion();
@@ -580,198 +648,157 @@
 
     function refillPool() {
         currentPool = [];
-        for (let i = 0; i < activeWordList.length; i++) {
+        for (let i = 0; i < activeList.length; i++) {
             currentPool.push(i);
         }
         currentPool.sort(() => Math.random() - 0.5);
+    }
 
-        questionTypePool = [];
-        let totalWords = activeWordList.length;
-        let third = Math.floor(totalWords / 3);
-        let remainder = totalWords % 3;
+    function clearAllTooltips() {
+        document.querySelectorAll('.word-tooltip').forEach(el => el.remove());
+        document.querySelectorAll('.word-token').forEach(el => el.classList.remove('active-word'));
+    }
 
-        for(let i=0; i<third; i++) {
-            questionTypePool.push(1, 2, 3);
-        }
-        for(let i=0; i<remainder; i++) {
-            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
-        }
-        questionTypePool.sort(() => Math.random() - 0.5);
+    function lookupWordMeaning(rawWord) {
+        let clean = rawWord.replace(/[.,?!;:"'()]/g, "").toLowerCase().trim();
+        if (wordDict[clean]) return { cleanWord: clean, meaning: wordDict[clean] };
+        
+        let noPossessive = clean.replace(/'s$/i, "");
+        if (wordDict[noPossessive]) return { cleanWord: noPossessive, meaning: wordDict[noPossessive] };
+
+        return { cleanWord: clean, meaning: "Anlam bulunamadı" };
+    }
+
+    function renderInteractiveSentence(sentenceText) {
+        const box = document.getElementById("sentence-box");
+        box.innerHTML = "";
+        
+        const words = sentenceText.split(" ");
+        words.forEach(wordStr => {
+            const span = document.createElement("span");
+            span.className = "word-token";
+            span.innerText = wordStr;
+            
+            span.onclick = function(event) {
+                event.stopPropagation();
+                const alreadyActive = span.classList.contains("active-word");
+                clearAllTooltips();
+                
+                if (!alreadyActive) {
+                    span.classList.add("active-word");
+                    const info = lookupWordMeaning(wordStr);
+                    
+                    const tooltip = document.createElement("div");
+                    tooltip.className = "word-tooltip";
+                    tooltip.innerText = info.meaning;
+                    span.appendChild(tooltip);
+                    
+                    speakText(info.cleanWord);
+                }
+            };
+            
+            box.appendChild(span);
+        });
     }
 
     function askQuestion() {
         isClickable = true;
+        clearAllTooltips();
         document.getElementById("message").innerText = "";
         
         for (let i = 0; i < 3; i++) {
             document.getElementById(`opt${i}`).className = "btn-option";
         }
-        
-        const inputField = document.getElementById("answer-input");
-        inputField.value = "";
-        inputField.style.borderColor = "#ced4da";
 
         if (isMistakeMode) {
             const randomIndex = Math.floor(Math.random() * mistakeQueue.length);
-            currentWordIndex = mistakeQueue[randomIndex];
-            currentQuestionType = Math.floor(Math.random() * 3) + 1;
+            currentSentenceIndex = mistakeQueue[randomIndex];
         } else {
             if (currentPool.length === 0) {
                 refillPool();
             }
-            currentWordIndex = currentPool.pop();
-            currentQuestionType = questionTypePool.pop();
+            currentSentenceIndex = currentPool.pop();
         }
 
-        currentWordObj = activeWordList[currentWordIndex];
+        currentSentenceObj = activeList[currentSentenceIndex];
+        renderInteractiveSentence(currentSentenceObj.en);
 
-        if (currentQuestionType === 3) {
-            document.getElementById("options-container").classList.add("hidden");
-            document.getElementById("input-container").classList.remove("hidden");
-            
-            document.getElementById('prompt-text').innerText = "BU KELİMENİN ANLAMI NEDİR? (YAZIN)";
-            document.getElementById("question-word").innerText = currentWordObj.en;
-            
-            setTimeout(() => inputField.focus(), 100);
-            
-        } else {
-            document.getElementById("options-container").classList.remove("hidden");
-            document.getElementById("input-container").classList.add("hidden");
-            
-            correctAnswerIndex = Math.floor(Math.random() * 3);
-            let wrongOptions = activeWordList.filter(w => w.en !== currentWordObj.en);
-            wrongOptions.sort(() => Math.random() - 0.5);
+        correctAnswerIndex = Math.floor(Math.random() * 3);
+        let wrongOptions = activeList.filter(item => item.tr !== currentSentenceObj.tr);
+        wrongOptions.sort(() => Math.random() - 0.5);
 
-            let optionsArr = [];
-            let wrongCounter = 0;
+        let optionsArr = [];
+        let wrongCounter = 0;
 
-            if (currentQuestionType === 1) {
-                document.getElementById('prompt-text').innerText = (currentLevelKey === "Kalıplar") ? "BU KALIBIN ANLAMI NEDİR?" : "BU KELİMENİN ANLAMI NEDİR?";
-                document.getElementById("question-word").innerText = currentWordObj.en;
-                
-                for (let i = 0; i < 3; i++) {
-                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.tr);
-                    else { optionsArr.push(wrongOptions[wrongCounter].tr); wrongCounter++; }
-                }
+        for (let i = 0; i < 3; i++) {
+            if (i === correctAnswerIndex) {
+                optionsArr.push(currentSentenceObj.tr);
             } else {
-                document.getElementById('prompt-text').innerText = "BU KELİMENİN İNGİLİZCESİ NEDİR?";
-                document.getElementById("question-word").innerText = currentWordObj.tr;
-                
-                for (let i = 0; i < 3; i++) {
-                    if (i === correctAnswerIndex) optionsArr.push(currentWordObj.en);
-                    else { optionsArr.push(wrongOptions[wrongCounter].en); wrongCounter++; }
-                }
+                optionsArr.push(wrongOptions[wrongCounter].tr);
+                wrongCounter++;
             }
+        }
 
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`opt${i}`).innerText = optionsArr[i];
-            }
+        for (let i = 0; i < 3; i++) {
+            document.getElementById(`opt${i}`).innerText = optionsArr[i];
         }
     }
 
     function checkAnswer(selectedIndex) {
         if (!isClickable) return; 
         isClickable = false;
+        clearAllTooltips();
 
         const selectedBtn = document.getElementById(`opt${selectedIndex}`);
         const correctBtn = document.getElementById(`opt${correctAnswerIndex}`);
 
         if (selectedIndex === correctAnswerIndex) {
             selectedBtn.classList.add("correct");
-            handleCorrectAnswer();
+            document.getElementById("message").innerText = "Harika! Doğru Çeviri 🎉";
+            document.getElementById("message").style.color = "#27ae60";
+            score += 10;
+            
+            if (isMistakeMode) {
+                historyData[currentSentenceIndex] = 'correct';
+                if (wrongCount > 0) wrongCount--;
+                correctCount++;
+                updateScore();
+
+                mistakeQueue = mistakeQueue.filter(m => m !== currentSentenceIndex);
+                
+                if (mistakeQueue.length === 0) {
+                    setTimeout(() => {
+                        isMistakeMode = false;
+                        document.getElementById('success-modal').classList.remove('hidden');
+                    }, 1000);
+                    return;
+                }
+            } else {
+                correctCount++; 
+                updateScore();
+                if (historyData[currentSentenceIndex] !== 'wrong') {
+                    historyData[currentSentenceIndex] = 'correct';
+                }
+            }
+
+            setTimeout(askQuestion, 1100); 
         } else {
             selectedBtn.classList.add("wrong");
             correctBtn.classList.add("correct");
-            handleWrongAnswer();
-        }
-    }
-
-    function checkInputAnswer() {
-        if (!isClickable) return; 
-        
-        const userInput = document.getElementById("answer-input").value;
-        if(userInput.trim() === "") return; 
-        
-        isClickable = false;
-        
-        let normalizedInput = userInput.toLocaleLowerCase('tr-TR').trim();
-        
-        let validAnswers = currentWordObj.tr.split('/').map(s => s.trim().toLocaleLowerCase('tr-TR'));
-        
-        validAnswers.forEach(ans => {
-            let cleaned = ans.replace(/\([^)]*\)/g, '').trim();
-            if (cleaned !== ans) validAnswers.push(cleaned);
-        });
-
-        validAnswers.push(currentWordObj.tr.toLocaleLowerCase('tr-TR').trim());
-
-        let isCorrect = validAnswers.includes(normalizedInput);
-
-        const inputField = document.getElementById("answer-input");
-        if (isCorrect) {
-            inputField.style.borderColor = "#27ae60";
-            inputField.style.backgroundColor = "#e8f8f5";
-            handleCorrectAnswer();
-            setTimeout(() => { inputField.style.backgroundColor = ""; }, 1000);
-        } else {
-            inputField.style.borderColor = "#c0392b";
-            inputField.style.backgroundColor = "#fdedec";
-            document.getElementById("message").innerText = `Yanlış! Doğrusu: ${currentWordObj.tr}`;
-            document.getElementById("message").style.color = "#c0392b";
-            handleWrongAnswer(true); 
-            setTimeout(() => { inputField.style.backgroundColor = ""; }, 2500);
-        }
-    }
-
-    function handleCorrectAnswer() {
-        document.getElementById("message").innerText = "Harika! 🎉";
-        document.getElementById("message").style.color = "#27ae60";
-        score += 10;
-        
-        if (isMistakeMode) {
-            historyData[currentWordIndex] = 'correct';
-            if (wrongCount > 0) wrongCount--;
-            correctCount++;
-            updateScore();
-
-            mistakeQueue = mistakeQueue.filter(m => m !== currentWordIndex);
-            
-            if (mistakeQueue.length === 0) {
-                setTimeout(() => {
-                    isMistakeMode = false;
-                    document.getElementById('success-modal').classList.remove('hidden');
-                }, 1000);
-                return;
-            }
-        } else {
-            correctCount++; 
-            updateScore();
-            if(historyData[currentWordIndex] !== 'wrong') {
-                historyData[currentWordIndex] = 'correct';
-            }
-        }
-
-        setTimeout(askQuestion, 1000); 
-    }
-
-    function handleWrongAnswer(skipMessageUpdate = false) {
-        if(!skipMessageUpdate) {
             document.getElementById("message").innerText = "Maalesef yanlış!";
             document.getElementById("message").style.color = "#c0392b";
-        }
-        
-        wrongCount++; 
-        updateScore();
-        historyData[currentWordIndex] = 'wrong';
+            
+            wrongCount++; 
+            updateScore();
+            historyData[currentSentenceIndex] = 'wrong';
 
-                if (!isMistakeMode && !currentPool.includes(currentWordIndex)) {
-            currentPool.push(currentWordIndex); 
-            currentPool.sort(() => Math.random() - 0.5); 
-            questionTypePool.push(Math.floor(Math.random() * 3) + 1);
-            questionTypePool.sort(() => Math.random() - 0.5);
-        }
+            if (!isMistakeMode && !currentPool.includes(currentSentenceIndex)) {
+                currentPool.push(currentSentenceIndex); 
+                currentPool.sort(() => Math.random() - 0.5); 
+            }
 
-        setTimeout(askQuestion, skipMessageUpdate ? 2500 : 1500); 
+            setTimeout(askQuestion, 1800); 
+        }
     }
 
     function closeSuccessModal() {
@@ -815,11 +842,11 @@
         const listDiv = document.getElementById('table-list');
         listDiv.innerHTML = "";
 
-        activeWordList.forEach((wordObj, i) => {
+        activeList.forEach((item, i) => {
             let row = document.createElement('div');
             row.className = "table-row";
             
-            let statusHTML = "";
+            let statusHTML = "-";
             let rowClass = "row-unanswered";
 
             if (historyData[i] === 'correct') {
@@ -828,11 +855,9 @@
             } else if (historyData[i] === 'wrong') {
                 statusHTML = "✖ Yanlış";
                 rowClass = "row-wrong";
-            } else {
-                statusHTML = "-";
             }
 
-            row.innerHTML = `<span><strong>${wordObj.en}</strong> (${wordObj.tr})</span> <span class="${rowClass}">${statusHTML}</span>`;
+            row.innerHTML = `<div><strong>${item.en}</strong><br><span style="color:#576574;">${item.tr}</span></div> <span class="${rowClass}">${statusHTML}</span>`;
             listDiv.appendChild(row);
         });
     }
@@ -843,7 +868,7 @@
 
     function startMistakeMode() {
         mistakeQueue = [];
-        activeWordList.forEach((wordObj, i) => {
+        activeList.forEach((item, i) => {
             if (historyData[i] === 'wrong') {
                 mistakeQueue.push(i);
             }
